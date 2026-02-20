@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Job" ADD COLUMN     "rated" BOOLEAN NOT NULL DEFAULT false;
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "reputation" DOUBLE PRECISION NOT NULL DEFAULT 3.0,
+ADD COLUMN     "total_reviews" INTEGER NOT NULL DEFAULT 0;

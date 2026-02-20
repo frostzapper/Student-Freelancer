@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Job" ADD COLUMN     "extension_count" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "max_extensions" INTEGER NOT NULL DEFAULT 3,
+ALTER COLUMN "updated_at" DROP DEFAULT;

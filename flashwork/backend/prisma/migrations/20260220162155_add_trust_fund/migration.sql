@@ -1,0 +1,8 @@
+-- CreateTable
+CREATE TABLE "TrustFund" (
+    "id" SERIAL NOT NULL,
+    "balance" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "TrustFund_pkey" PRIMARY KEY ("id")
+);

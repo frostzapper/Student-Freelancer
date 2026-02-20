@@ -1,0 +1,792 @@
+const { prisma } = require('../config/database');
+
+const createJob = async (req, res) => {
+  try {
+    const {
+      title,
+      description,
+      base_price,
+      pricing_mode,
+      deadline,
+      work_mode,
+      ai_allowed
+    } = req.body;
+
+    const clientId = req.user.id;
+    const jobPrice = parseFloat(base_price);
+
+    const client = await prisma.user.findUnique({
+      where: { id: clientId }
+    });
+
+    if (client.wallet_balance < jobPrice) {
+      return res.status(400).json({ error: 'Insufficient wallet balance' });
+    }
+
+    await prisma.user.update({
+      where: { id: clientId },
+      data: {
+        wallet_balance: {
+          decrement: jobPrice
+        }
+      }
+    });
+
+    const question_file_url = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const job = await prisma.job.create({
+      data: {
+        title,
+        description,
+        base_price: jobPrice,
+        current_price: jobPrice,
+        pricing_mode,
+        deadline: new Date(deadline),
+        work_mode,
+        ai_allowed: ai_allowed === 'true' || ai_allowed === true,
+        question_file_url,
+        status: 'open',
+        urgent_status: false,
+        client_id: clientId
+      }
+    });
+
+    await prisma.escrow.create({
+      data: {
+        job_id: job.id,
+        locked_amount: jobPrice,
+        status: 'locked',
+        locked: true,
+        client_id: clientId
+      }
+    });
+
+    const jobWithEscrow = await prisma.job.findUnique({
+      where: { id: job.id },
+      include: { escrow: true }
+    });
+
+    res.status(201).json(jobWithEscrow);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getOpenJobs = async (req, res) => {
+  try {
+    const { urgent_status, work_mode, ai_allowed, auction_mode, min_price, max_price } = req.query;
+
+    const where = {
+      status: 'open'
+    };
+
+    if (urgent_status !== undefined) {
+      where.urgent_status = urgent_status === 'true';
+    }
+
+    if (work_mode) {
+      where.work_mode = work_mode;
+    }
+
+    if (ai_allowed !== undefined) {
+      where.ai_allowed = ai_allowed === 'true';
+    }
+
+    if (auction_mode !== undefined) {
+      where.auction_mode = auction_mode === 'true';
+    }
+
+    if (min_price !== undefined || max_price !== undefined) {
+      where.current_price = {};
+      if (min_price !== undefined) {
+        where.current_price.gte = parseFloat(min_price);
+      }
+      if (max_price !== undefined) {
+        where.current_price.lte = parseFloat(max_price);
+      }
+    }
+
+    const jobs = await prisma.job.findMany({
+      where,
+      orderBy: {
+        created_at: 'desc'
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        current_price: true,
+        pricing_mode: true,
+        deadline: true,
+        work_mode: true,
+        ai_allowed: true,
+        question_file_url: true,
+        urgent_status: true,
+        auction_mode: true,
+        auction_end: true,
+        created_at: true
+      }
+    });
+
+    res.json(jobs);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const acceptJob = async (req, res) => {
+  try {
+    const jobId = parseInt(req.params.id);
+    const workerId = req.user.id;
+    const { mode, member_ids } = req.body;
+
+    if (!mode) {
+      return res.status(400).json({ error: "Mode is required (solo or group)" });
+    }
+
+    const job = await prisma.job.findUnique({
+      where: { id: jobId }
+    });
+
+    if (!job) {
+      return res.status(404).json({ error: "Job not found" });
+    }
+
+    if (job.status !== "open") {
+      return res.status(400).json({ error: "Job is not available" });
+    }
+
+    // 🔹 Function to check if worker has active job (leader or member)
+    const hasActiveJob = async (userId) => {
+      const activeLeader = await prisma.workerEntity.findFirst({
+        where: {
+          leader_id: userId,
+          status: "active"
+        }
+      });
+
+      const activeMember = await prisma.workerGroupMember.findFirst({
+        where: {
+          worker_id: userId,
+          workerEntity: {
+            status: "active"
+          }
+        }
+      });
+
+      return activeLeader || activeMember;
+    };
+
+    if (mode === "solo") {
+
+      if (await hasActiveJob(workerId)) {
+        return res.status(400).json({ error: "Worker already has an active job" });
+      }
+
+      await prisma.workerEntity.create({
+        data: {
+          job_id: jobId,
+          type: "solo",
+          leader_id: workerId,
+          status: "active"
+        }
+      });
+
+      const updatedJob = await prisma.job.update({
+        where: { id: jobId },
+        data: { status: "assigned" }
+      });
+
+      return res.json(updatedJob);
+    }
+
+    // 🔹 GROUP MODE
+    if (mode === "group") {
+
+      if (!member_ids || member_ids.length === 0) {
+        return res.status(400).json({ error: "Group members required" });
+      }
+
+      const uniqueMembers = [...new Set([...member_ids, workerId])];
+
+      for (const memberId of uniqueMembers) {
+
+        const user = await prisma.user.findUnique({
+          where: { id: memberId }
+        });
+
+        if (!user || user.role !== "worker") {
+          return res.status(400).json({ error: `Invalid worker: ${memberId}` });
+        }
+
+        if (await hasActiveJob(memberId)) {
+          return res.status(400).json({
+            error: `Worker ${memberId} already has an active job`
+          });
+        }
+      }
+
+      const workerEntity = await prisma.workerEntity.create({
+        data: {
+          job_id: jobId,
+          type: "group",
+          leader_id: workerId,
+          status: "active"
+        }
+      });
+
+      for (const memberId of uniqueMembers) {
+        await prisma.workerGroupMember.create({
+          data: {
+            worker_entity_id: workerEntity.id,
+            worker_id: memberId
+          }
+        });
+      }
+
+      const updatedJob = await prisma.job.update({
+        where: { id: jobId },
+        data: { status: "assigned" }
+      });
+
+      return res.json(updatedJob);
+    }
+
+    return res.status(400).json({ error: "Invalid mode" });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const submitJob = async (req, res) => {
+  try {
+    const jobId = parseInt(req.params.id);
+    const workerId = req.user.id;
+
+    const job = await prisma.job.findUnique({
+      where: { id: jobId },
+      include: { workerEntity: true }
+    });
+
+    if (!job) {
+      return res.status(404).json({ error: 'Job not found' });
+    }
+
+    if (job.status !== 'assigned') {
+      return res.status(400).json({ error: 'Job is not in assigned status' });
+    }
+
+    if (!job.workerEntity || job.workerEntity.leader_id !== workerId) {
+      return res.status(403).json({ error: 'Worker not assigned to this job' });
+    }
+
+    const submission_file_url = req.file ? `/uploads/${req.file.filename}` : null;
+
+    await prisma.workerEntity.update({
+      where: { id: job.workerEntity.id },
+      data: { status: 'completed' }
+    });
+
+    const updatedJob = await prisma.job.update({
+      where: { id: jobId },
+      data: {
+        status: 'submitted',
+        submission_file_url
+      },
+      include: {
+        workerEntity: true
+      }
+    });
+
+    res.json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const approveJob = async (req, res) => {
+  try {
+    const jobId = parseInt(req.params.id);
+    const clientId = req.user.id;
+
+    const job = await prisma.job.findUnique({
+      where: { id: jobId },
+      include: {
+        workerEntity: {
+          include: {
+            groupMembers: true
+          }
+        },
+        escrow: true
+      }
+    });
+
+    if (!job) {
+      return res.status(404).json({ error: 'Job not found' });
+    }
+
+    if (job.client_id !== clientId) {
+      return res.status(403).json({ error: 'Not authorized to approve this job' });
+    }
+
+    if (job.status !== 'submitted') {
+      return res.status(400).json({ error: 'Job is not in submitted status' });
+    }
+
+    const platformCut = job.current_price * 0.01;
+    const workerAmount = job.current_price - platformCut;
+
+    await prisma.escrow.update({
+      where: { id: job.escrow.id },
+      data: { 
+        status: 'released',
+        locked: false
+      }
+    });
+
+    if (job.workerEntity.type === 'group' && job.workerEntity.groupMembers.length > 0) {
+      const totalMembers = job.workerEntity.groupMembers.length;
+      const splitAmount = workerAmount / totalMembers;
+
+      for (const member of job.workerEntity.groupMembers) {
+        await prisma.user.update({
+          where: { id: member.worker_id },
+          data: {
+            total_earnings: {
+              increment: splitAmount
+            },
+            wallet_balance: {
+              increment: splitAmount
+            }
+          }
+        });
+      }
+    } else {
+      await prisma.user.update({
+        where: { id: job.workerEntity.leader_id },
+        data: {
+          total_earnings: {
+            increment: workerAmount
+          },
+          wallet_balance: {
+            increment: workerAmount
+          }
+        }
+      });
+    }
+
+    await prisma.workerEntity.update({
+      where: { id: job.workerEntity.id },
+      data: { status: 'paid' }
+    });
+
+    const updatedJob = await prisma.job.update({
+      where: { id: jobId },
+      data: { status: 'completed' },
+      include: {
+        workerEntity: {
+          include: {
+            groupMembers: true
+          }
+        },
+        escrow: true
+      }
+    });
+
+    await prisma.trustFund.upsert({
+      where: { id: 1 },
+      update: {
+        balance: { increment: platformCut }
+      },
+      create: {
+        id: 1,
+        balance: platformCut
+      }
+    });
+
+    res.json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const extendJob = async (req, res) => {
+  try {
+    const jobId = parseInt(req.params.id);
+    const workerId = req.user.id;
+
+    const job = await prisma.job.findUnique({
+      where: { id: jobId },
+      include: { workerEntity: true }
+    });
+
+    if (!job) {
+      return res.status(404).json({ error: 'Job not found' });
+    }
+
+    if (!job.workerEntity || job.workerEntity.leader_id !== workerId) {
+      return res.status(403).json({ error: 'Worker not assigned as leader of this job' });
+    }
+
+    if (job.extension_count >= job.max_extensions) {
+      return res.status(400).json({ error: 'Maximum extensions reached' });
+    }
+
+    const newPrice = job.current_price * 0.9;
+    const newExtensionCount = job.extension_count + 1;
+    const shouldBeUrgent = newExtensionCount >= job.max_extensions;
+
+    const updatedJob = await prisma.job.update({
+      where: { id: jobId },
+      data: {
+        current_price: newPrice,
+        extension_count: newExtensionCount,
+        urgent_status: shouldBeUrgent
+      },
+      include: {
+        workerEntity: true
+      }
+    });
+
+    res.json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const bidOnJob = async (req, res) => {
+  try {
+    const jobId = parseInt(req.params.id);
+    const workerId = req.user.id;
+    const { pitch, confidence } = req.body;
+
+    const job = await prisma.job.findUnique({
+      where: { id: jobId }
+    });
+
+    if (!job) {
+      return res.status(404).json({ error: 'Job not found' });
+    }
+
+    if (!job.auction_mode) {
+      return res.status(400).json({ error: 'Job is not in auction mode' });
+    }
+
+    if (job.auction_end && new Date() > new Date(job.auction_end)) {
+      return res.status(400).json({ error: 'Auction has ended' });
+    }
+
+    const existingBid = await prisma.auctionBid.findFirst({
+      where: {
+        job_id: jobId,
+        worker_id: workerId
+      }
+    });
+
+    if (existingBid) {
+      return res.status(400).json({ error: 'Worker has already placed a bid on this job' });
+    }
+
+    const bid = await prisma.auctionBid.create({
+      data: {
+        job_id: jobId,
+        worker_id: workerId,
+        pitch,
+        confidence: parseInt(confidence)
+      }
+    });
+
+    res.status(201).json(bid);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getJobBids = async (req, res) => {
+  try {
+    const jobId = parseInt(req.params.id);
+    const clientId = req.user.id;
+
+    const job = await prisma.job.findUnique({
+      where: { id: jobId }
+    });
+
+    if (!job) {
+      return res.status(404).json({ error: 'Job not found' });
+    }
+
+    if (job.client_id !== clientId) {
+      return res.status(403).json({ error: 'Not authorized to view bids for this job' });
+    }
+
+    const bids = await prisma.auctionBid.findMany({
+      where: { job_id: jobId },
+      include: {
+        worker: {
+          select: {
+            id: true,
+            name: true,
+            reliability_score: true,
+            quality_score: true
+          }
+        }
+      },
+      orderBy: [
+        { confidence: 'desc' },
+        { created_at: 'asc' }
+      ]
+    });
+
+    const rankedBids = bids.sort((a, b) => {
+      if (b.confidence !== a.confidence) {
+        return b.confidence - a.confidence;
+      }
+      const repA = (a.worker.reliability_score + a.worker.quality_score) / 2;
+      const repB = (b.worker.reliability_score + b.worker.quality_score) / 2;
+      if (repB !== repA) {
+        return repB - repA;
+      }
+      return new Date(a.created_at) - new Date(b.created_at);
+    });
+
+    res.json(rankedBids);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const selectWorker = async (req, res) => {
+  try {
+    const jobId = parseInt(req.params.id);
+    const clientId = req.user.id;
+    const { worker_id } = req.body;
+
+    const job = await prisma.job.findUnique({
+      where: { id: jobId }
+    });
+
+    if (!job) {
+      return res.status(404).json({ error: 'Job not found' });
+    }
+
+    if (job.client_id !== clientId) {
+      return res.status(403).json({ error: 'Not authorized to select worker for this job' });
+    }
+
+    if (!job.auction_mode) {
+      return res.status(400).json({ error: 'Job is not in auction mode' });
+    }
+
+    await prisma.workerEntity.create({
+      data: {
+        job_id: jobId,
+        type: 'solo',
+        leader_id: worker_id,
+        status: 'active'
+      }
+    });
+
+    await prisma.job.update({
+      where: { id: jobId },
+      data: {
+        status: 'assigned',
+        auction_mode: false
+      }
+    });
+
+    await prisma.auctionBid.deleteMany({
+      where: { job_id: jobId }
+    });
+
+    const updatedJob = await prisma.job.findUnique({
+      where: { id: jobId },
+      include: {
+        workerEntity: true
+      }
+    });
+
+    res.json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const rateJob = async (req, res) => {
+  try {
+    const jobId = parseInt(req.params.id);
+    const clientId = req.user.id;
+    const { rating } = req.body;
+
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+    }
+
+    const job = await prisma.job.findUnique({
+      where: { id: jobId },
+      include: {
+        workerEntity: {
+          include: {
+            groupMembers: true
+          }
+        }
+      }
+    });
+
+    if (!job) {
+      return res.status(404).json({ error: 'Job not found' });
+    }
+
+    if (job.client_id !== clientId) {
+      return res.status(403).json({ error: 'Not authorized to rate this job' });
+    }
+
+    if (job.status !== 'completed') {
+      return res.status(400).json({ error: 'Job must be completed before rating' });
+    }
+
+    if (job.rated) {
+      return res.status(400).json({ error: 'Job has already been rated' });
+    }
+
+    const ratingValue = parseFloat(rating);
+    const updatedWorkers = [];
+
+    if (job.workerEntity.type === 'group' && job.workerEntity.groupMembers.length > 0) {
+      for (const member of job.workerEntity.groupMembers) {
+        const worker = await prisma.user.findUnique({
+          where: { id: member.worker_id }
+        });
+
+        const newTotalReviews = worker.total_reviews + 1;
+        const newReputation = ((worker.reputation * worker.total_reviews) + ratingValue) / newTotalReviews;
+
+        const updatedWorker = await prisma.user.update({
+          where: { id: member.worker_id },
+          data: {
+            reputation: newReputation,
+            total_reviews: newTotalReviews
+          }
+        });
+
+        updatedWorkers.push(updatedWorker);
+      }
+    } else {
+      const worker = await prisma.user.findUnique({
+        where: { id: job.workerEntity.leader_id }
+      });
+
+      const newTotalReviews = worker.total_reviews + 1;
+      const newReputation = ((worker.reputation * worker.total_reviews) + ratingValue) / newTotalReviews;
+
+      const updatedWorker = await prisma.user.update({
+        where: { id: job.workerEntity.leader_id },
+        data: {
+          reputation: newReputation,
+          total_reviews: newTotalReviews
+        }
+      });
+
+      updatedWorkers.push(updatedWorker);
+    }
+
+    await prisma.job.update({
+      where: { id: jobId },
+      data: { rated: true }
+    });
+
+    res.json({
+      message: 'Job rated successfully',
+      workers: updatedWorkers.map(w => ({
+        id: w.id,
+        name: w.name,
+        reputation: w.reputation,
+        total_reviews: w.total_reviews
+      }))
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getRecommendedJobs = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!user.skills || (Array.isArray(user.skills) && user.skills.length === 0)) {
+      return res.json({
+        message: 'NO_SKILLS',
+        jobs: []
+      });
+    }
+
+    const userSkills = Array.isArray(user.skills) ? user.skills : [];
+
+    const openJobs = await prisma.job.findMany({
+      where: { status: 'open' },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        current_price: true,
+        pricing_mode: true,
+        deadline: true,
+        work_mode: true,
+        ai_allowed: true,
+        question_file_url: true,
+        urgent_status: true,
+        auction_mode: true,
+        auction_end: true,
+        created_at: true
+      }
+    });
+
+    const jobsWithScores = openJobs.map(job => {
+      let matchScore = 0;
+
+      const titleLower = job.title.toLowerCase();
+      const descLower = job.description.toLowerCase();
+
+      for (const skill of userSkills) {
+        const skillLower = skill.toLowerCase();
+        if (titleLower.includes(skillLower) || descLower.includes(skillLower)) {
+          matchScore += 10;
+        }
+      }
+
+      const maxScore = (userSkills.length * 10) + 5;
+      const matchPercent = maxScore > 0 ? Math.round((matchScore / maxScore) * 100) : 0;
+
+      return {
+        ...job,
+        matchScore,
+        matchPercent
+      };
+    });
+
+    jobsWithScores.sort((a, b) => b.matchScore - a.matchScore);
+
+    res.json(jobsWithScores);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  createJob,
+  getOpenJobs,
+  acceptJob,
+  submitJob,
+  approveJob,
+  extendJob,
+  bidOnJob,
+  getJobBids,
+  selectWorker,
+  rateJob,
+  getRecommendedJobs
+};
