@@ -9,8 +9,13 @@ const createJob = async (req, res) => {
       pricing_mode,
       deadline,
       work_mode,
-      ai_allowed
+      ai_allowed,
+      estimated_hours
     } = req.body;
+
+    if (!estimated_hours) {
+      return res.status(400).json({ error: 'Estimated hours is required' });
+    }
 
     const clientId = req.user.id;
     const jobPrice = parseFloat(base_price);
@@ -47,6 +52,7 @@ const createJob = async (req, res) => {
         question_file_url,
         status: 'open',
         urgent_status: false,
+        estimated_hours: parseInt(estimated_hours),
         client_id: clientId
       }
     });
@@ -140,10 +146,6 @@ const acceptJob = async (req, res) => {
     const workerId = req.user.id;
     const { mode, member_ids } = req.body;
 
-    if (!mode) {
-      return res.status(400).json({ error: "Mode is required (solo or group)" });
-    }
-
     const job = await prisma.job.findUnique({
       where: { id: jobId }
     });
@@ -156,7 +158,127 @@ const acceptJob = async (req, res) => {
       return res.status(400).json({ error: "Job is not available" });
     }
 
-    // 🔹 Function to check if worker has active job (leader or member)
+    const worker = await prisma.user.findUnique({
+      where: { id: workerId }
+    });
+
+    if (worker.is_student) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const weekStart = new Date(today);
+      weekStart.setDate(today.getDate() - today.getDay());
+
+      const activeJobs = await prisma.job.findMany({
+        where: {
+          workerEntity: {
+            OR: [
+              { leader_id: workerId },
+              { groupMembers: { some: { worker_id: workerId } } }
+            ],
+            status: 'active'
+          }
+        },
+        select: { estimated_hours: true }
+      });
+
+      const completedThisWeek = await prisma.job.findMany({
+        where: {
+          workerEntity: {
+            OR: [
+              { leader_id: workerId },
+              { groupMembers: { some: { worker_id: workerId } } }
+            ]
+          },
+          status: 'completed',
+          updated_at: { gte: weekStart }
+        },
+        select: { estimated_hours: true }
+      });
+
+      const dailyHours = activeJobs.reduce((sum, j) => sum + (j.estimated_hours || 0), 0);
+      const weeklyHours = [...activeJobs, ...completedThisWeek].reduce((sum, j) => sum + (j.estimated_hours || 0), 0);
+
+      if (dailyHours + job.estimated_hours > worker.daily_hour_limit) {
+        return res.status(400).json({ 
+          error: `Daily hour limit exceeded. You can work ${worker.daily_hour_limit} hours per day. Current: ${dailyHours}, Job requires: ${job.estimated_hours}` 
+        });
+      }
+
+      if (weeklyHours + job.estimated_hours > worker.weekly_hour_limit) {
+        return res.status(400).json({ 
+          error: `Weekly hour limit exceeded. You can work ${worker.weekly_hour_limit} hours per week. Current: ${weeklyHours}, Job requires: ${job.estimated_hours}` 
+        });
+      }
+    }
+
+    if (job.auto_group && job.work_mode === "group") {
+      if (!job.required_group_size) {
+        return res.status(400).json({ error: "Required group size not specified" });
+      }
+
+      const activeWorkers = await prisma.availability.findMany({
+        where: {
+          is_active: true
+        },
+        take: job.required_group_size,
+        select: {
+          worker_id: true,
+          id: true
+        }
+      });
+
+      if (activeWorkers.length < job.required_group_size) {
+        return res.status(400).json({ 
+          error: `Not enough workers available. Need ${job.required_group_size}, found ${activeWorkers.length}` 
+        });
+      }
+
+      const workerIds = activeWorkers.map(w => w.worker_id);
+
+      const workerEntity = await prisma.workerEntity.create({
+        data: {
+          job_id: jobId,
+          type: "group",
+          leader_id: workerIds[0],
+          status: "active"
+        }
+      });
+
+      for (const workerId of workerIds) {
+        await prisma.workerGroupMember.create({
+          data: {
+            worker_entity_id: workerEntity.id,
+            worker_id: workerId
+          }
+        });
+      }
+
+      for (const availability of activeWorkers) {
+        await prisma.availability.update({
+          where: { id: availability.id },
+          data: { is_active: false }
+        });
+      }
+
+      const updatedJob = await prisma.job.update({
+        where: { id: jobId },
+        data: { status: "assigned" },
+        include: {
+          workerEntity: {
+            include: {
+              groupMembers: true
+            }
+          }
+        }
+      });
+
+      return res.json(updatedJob);
+    }
+
+    if (!mode) {
+      return res.status(400).json({ error: "Mode is required (solo or group)" });
+    }
+
     const hasActiveJob = async (userId) => {
       const activeLeader = await prisma.workerEntity.findFirst({
         where: {
@@ -200,7 +322,6 @@ const acceptJob = async (req, res) => {
       return res.json(updatedJob);
     }
 
-    // 🔹 GROUP MODE
     if (mode === "group") {
 
       if (!member_ids || member_ids.length === 0) {
