@@ -120,11 +120,14 @@ model AuctionBid {
   id         Int      @id @default(autoincrement())
   job_id     Int
   worker_id  Int
-  pitch      String
-  confidence Int
+  bid_amount Float
+  message    String?
+  status     String   @default("pending")
   created_at DateTime @default(now())
   job        Job      @relation(fields: [job_id], references: [id])
   worker     User     @relation(fields: [worker_id], references: [id])
+  
+  @@unique([job_id, worker_id])
 }
 
 model WorkerSchedule {

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Jobs For Me - FlashWork</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/worker.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main class="recommended-page">
+        <h1>Best Jobs For Me</h1>
+        <p class="subtitle">Jobs matched to your skills and education</p>
+        
+        <div id="no-skills-message" class="info-banner" style="display: none;">
+            <p>Please add your skills in your <a href="profile.html">profile</a> to see personalized recommendations</p>
+        </div>
+        
+        <div id="jobs-grid" class="jobs-grid"></div>
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <p>No recommended jobs available right now</p>
+        </div>
+    </main>
+    
+    <div id="footer-container"></div>
+    
+    <script type="module" src="../js/worker/recommended.js"></script>
+    <script type="module" src="../js/components/navbar.js"></script>
+</body>
+</html>

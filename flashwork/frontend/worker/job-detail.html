@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details - FlashWork</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/worker.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main>
+        <div class="job-detail-container">
+            <!-- Loading State -->
+            <div id="loading-state" class="loading-state">
+                <p>Loading job details...</p>
+            </div>
+            
+            <!-- Job Detail Content -->
+            <div id="job-detail-content" style="display: none;">
+                <!-- Header -->
+                <div class="job-detail-header">
+                    <div>
+                        <h1 id="job-title"></h1>
+                        <div class="job-meta-info">
+                            <span class="status-badge" id="job-status"></span>
+                            <span class="job-id">Job #<span id="job-id"></span></span>
+                        </div>
+                    </div>
+                    <div class="job-price-large" id="job-price"></div>
+                </div>
+                
+                <!-- Main Grid -->
+                <div class="job-detail-grid">
+                    <!-- Left Column -->
+                    <div class="job-detail-main">
+                        <!-- Description -->
+                        <div class="detail-card">
+                            <h3>Description</h3>
+                            <p id="job-description"></p>
+                        </div>
+                        
+                        <!-- Job Info -->
+                        <div class="detail-card">
+                            <h3>Job Information</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">Work Mode</span>
+                                    <span class="info-value" id="job-work-mode"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Deadline</span>
+                                    <span class="info-value" id="job-deadline"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Estimated Hours</span>
+                                    <span class="info-value" id="job-hours"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">AI Allowed</span>
+                                    <span class="info-value" id="job-ai"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Urgent</span>
+                                    <span class="info-value" id="job-urgent"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Pricing Mode</span>
+                                    <span class="info-value" id="job-pricing"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Group System (for group jobs) -->
+                        <div class="detail-card" id="group-card" style="display: none;">
+                            <h3>👥 Group Work</h3>
+                            
+                            <!-- Group Actions (before assignment) -->
+                            <div id="group-actions" style="display: none;">
+                                <p class="group-info">This is a group job. You can accept it solo or form a group.</p>
+                                <div class="group-buttons">
+                                    <button class="btn btn-primary" id="accept-solo-btn">
+                                        👤 Accept Solo
+                                    </button>
+                                    <button class="btn btn-secondary" id="accept-group-btn">
+                                        👥 Accept as Group
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Group Members Display -->
+                            <div id="group-members-display" style="display: none;">
+                                <div class="group-header">
+                                    <h4>Group Members</h4>
+                                    <span class="member-count" id="member-count"></span>
+                                </div>
+                                <div id="members-list" class="members-list"></div>
+                                
+                                <!-- Payout Split Preview -->
+                                <div class="payout-preview">
+                                    <h4>💰 Payout Split</h4>
+                                    <div class="split-info">
+                                        <div class="split-item">
+                                            <span>Total Job Price</span>
+                                            <span id="split-total"></span>
+                                        </div>
+                                        <div class="split-item">
+                                            <span>Platform Fee (1%)</span>
+                                            <span id="split-fee"></span>
+                                        </div>
+                                        <div class="split-item highlight">
+                                            <span>Per Member</span>
+                                            <span id="split-per-member"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Question File -->
+                        <div class="detail-card" id="question-file-card" style="display: none;">
+                            <h3>Attached Files</h3>
+                            <a href="#" id="question-file-link" class="file-link" target="_blank">
+                                📎 View Question File
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Sidebar -->
+                    <div class="job-detail-sidebar">
+                        <!-- Accept Job Card -->
+                        <div class="detail-card" id="accept-card" style="display: none;">
+                            <h3>Accept This Job</h3>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary btn-large" id="accept-job-btn">
+                                    ✓ Accept Job
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Job Status Card -->
+                        <div class="detail-card">
+                            <h3>Job Status</h3>
+                            <div id="status-info"></div>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="detail-card">
+                            <h3>Actions</h3>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary" onclick="history.back()">
+                                    ← Back to Jobs
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Group Member Input Modal -->
+    <div id="group-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Form a Group</h3>
+                <button class="modal-close" id="close-group-modal">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Enter the worker IDs of your group members (comma separated):</p>
+                <div class="form-group">
+                    <label for="member-ids">Member IDs</label>
+                    <input type="text" id="member-ids" placeholder="e.g., 2, 3, 4">
+                    <small>You will be the group leader</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-group">Cancel</button>
+                <button class="btn btn-primary" id="submit-group">Create Group & Accept</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast" class="toast"></div>
+    <div id="footer-container"></div>
+    
+    <script type="module" src="../js/worker/job-detail.js"></script>
+    <script type="module" src="../js/components/navbar.js"></script>
+</body>
+</html>
