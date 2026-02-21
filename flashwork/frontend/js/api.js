@@ -22,12 +22,15 @@ export async function apiRequest(endpoint, options = {}) {
         const data = await response.json();
         
         if (!response.ok) {
-            // Auto-logout on authentication errors
-            if (data.error === 'User not found' || data.error === 'Invalid token' || response.status === 401) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                window.location.href = '/login.html';
-                return;
+            // Only auto-logout on authentication errors for authenticated endpoints
+            // Don't redirect on login failures
+            if (endpoint !== '/auth/login' && endpoint !== '/auth/register') {
+                if (data.error === 'User not found' || data.error === 'Invalid token' || response.status === 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = '/login.html';
+                    return;
+                }
             }
             throw new Error(data.error || data.message || 'Request failed');
         }
@@ -57,12 +60,14 @@ export async function apiUpload(endpoint, formData) {
         const data = await response.json();
         
         if (!response.ok) {
-            // Auto-logout on authentication errors
-            if (data.error === 'User not found' || data.error === 'Invalid token' || response.status === 401) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                window.location.href = '/login.html';
-                return;
+            // Only auto-logout on authentication errors for authenticated endpoints
+            if (endpoint !== '/auth/login' && endpoint !== '/auth/register') {
+                if (data.error === 'User not found' || data.error === 'Invalid token' || response.status === 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = '/login.html';
+                    return;
+                }
             }
             throw new Error(data.error || data.message || 'Upload failed');
         }
