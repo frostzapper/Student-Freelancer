@@ -50,11 +50,16 @@ async function setupAuthenticatedNav() {
     navLinks.innerHTML = links;
     
     // Load wallet balance
+    const walletBalanceEl = document.getElementById('wallet-balance');
     try {
         const data = await apiRequest(ENDPOINTS.WALLET_BALANCE);
-        document.getElementById('wallet-balance').textContent = formatCurrency(data.balance);
+        console.log('Wallet balance data:', data);
+        walletBalanceEl.textContent = formatCurrency(data.balance);
+        walletBalanceEl.style.display = 'block';
     } catch (error) {
         console.error('Error loading balance:', error);
+        walletBalanceEl.textContent = '₹0';
+        walletBalanceEl.style.display = 'block';
     }
     
     // Setup logout

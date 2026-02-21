@@ -60,6 +60,9 @@
     font-weight: 600;
     font-size: 0.9rem;
     border: 1px solid var(--border-color);
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
 }
 
 .location-badge {

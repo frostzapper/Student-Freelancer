@@ -622,8 +622,9 @@
 }
 
 .filter-tab.active {
-    background-color: var(--text-primary);
-    color: #000;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-weight: 700;
 }
 
 /* Client Job Cards */

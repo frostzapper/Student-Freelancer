@@ -13,8 +13,17 @@ let currentFilter = 'all';
 async function loadDashboard() {
     try {
         // Load wallet balance
+        console.log('Loading wallet balance...');
         const walletData = await apiRequest(ENDPOINTS.WALLET_BALANCE);
-        document.getElementById('wallet-balance').textContent = formatCurrency(walletData.balance);
+        console.log('Wallet data received:', walletData);
+        
+        const walletBalanceEl = document.getElementById('wallet-balance');
+        if (walletBalanceEl) {
+            walletBalanceEl.textContent = formatCurrency(walletData.balance);
+            console.log('Wallet balance set to:', formatCurrency(walletData.balance));
+        } else {
+            console.error('Wallet balance element not found!');
+        }
         
         // Load trust fund balance
         await loadTrustFund();
@@ -24,6 +33,11 @@ async function loadDashboard() {
         
     } catch (error) {
         console.error('Error loading dashboard:', error);
+        // Show error in wallet balance
+        const walletBalanceEl = document.getElementById('wallet-balance');
+        if (walletBalanceEl) {
+            walletBalanceEl.textContent = '₹0';
+        }
     }
 }
 
