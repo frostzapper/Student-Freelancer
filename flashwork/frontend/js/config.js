@@ -1,5 +1,5 @@
 // API Configuration
-export const API_BASE_URL = 'http://localhost:5000/api';
+export const API_BASE_URL = 'fetch("https://https://student-freelancer-1.onrender.com//api")';
 
 export const ENDPOINTS = {
     // Auth
