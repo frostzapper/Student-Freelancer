@@ -1,13 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { createJob, getOpenJobs, acceptJob, submitJob, approveJob, extendJob, bidOnJob, getJobBids, selectWorker, rateJob, getRecommendedJobs } = require('../controllers/jobController');
+const { createJob, getOpenJobs, getJobById, getClientJobs, acceptJob, submitJob, approveJob, extendJob, bidOnJob, getJobBids, selectWorker, rateJob, getRecommendedJobs, getWorkerBidInfo } = require('../controllers/jobController');
 const authMiddleware = require('../middleware/authMiddleware');
 const checkRole = require('../middleware/roleMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 
+router.get('/', authMiddleware, checkRole('client'), getClientJobs);
 router.post('/', authMiddleware, checkRole('client'), upload.single('question_file'), createJob);
 router.get('/open', authMiddleware, checkRole('worker'), getOpenJobs);
 router.get('/recommended', authMiddleware, getRecommendedJobs);
+router.get('/:id', authMiddleware, getJobById);
+router.get('/:id/bid-info', authMiddleware, checkRole('worker'), getWorkerBidInfo);
 router.post('/:id/accept', authMiddleware, checkRole('worker'), acceptJob);
 router.post('/:id/submit', authMiddleware, checkRole('worker'), upload.single('submission_file'), submitJob);
 router.post('/:id/approve', authMiddleware, checkRole('client'), approveJob);

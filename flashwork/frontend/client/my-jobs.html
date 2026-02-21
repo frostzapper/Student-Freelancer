@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Jobs - FlashWork</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/client.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main class="my-jobs-page">
+        <h1>My Jobs</h1>
+        
+        <div class="filters">
+            <select id="status-filter">
+                <option value="">All Status</option>
+                <option value="open">Open</option>
+                <option value="assigned">Assigned</option>
+                <option value="submitted">Submitted</option>
+                <option value="completed">Completed</option>
+            </select>
+        </div>
+        
+        <div id="jobs-grid" class="jobs-grid"></div>
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <p>No jobs posted yet</p>
+        </div>
+    </main>
+    
+    <div id="footer-container"></div>
+    
+    <script type="module" src="../js/client/my-jobs.js"></script>
+    <script type="module" src="../js/components/navbar.js"></script>
+</body>
+</html>

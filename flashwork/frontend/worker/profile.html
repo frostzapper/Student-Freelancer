@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - FlashWork</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/worker.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main class="profile-page">
+        <h1>My Profile</h1>
+        
+        <!-- Reputation Card -->
+        <div class="reputation-card">
+            <h2>⭐ Reputation</h2>
+            <div class="reputation-display">
+                <div class="star-rating" id="star-rating">
+                    <span class="star">☆</span>
+                    <span class="star">☆</span>
+                    <span class="star">☆</span>
+                    <span class="star">☆</span>
+                    <span class="star">☆</span>
+                </div>
+                <div class="reputation-score">
+                    <span class="score-value" id="reputation-score">3.0</span>
+                    <span class="score-label">out of 5</span>
+                </div>
+                <div class="rating-count">
+                    Based on <span id="rating-count">0</span> reviews
+                </div>
+            </div>
+        </div>
+        
+        <form id="profile-form" class="profile-form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" disabled>
+            </div>
+            
+            <div class="form-group">
+                <label for="education">Education</label>
+                <input type="text" id="education" name="education" placeholder="e.g., B.Tech Computer Science">
+            </div>
+            
+            <div class="form-group">
+                <label for="skills">Skills (comma separated)</label>
+                <input type="text" id="skills" name="skills" placeholder="e.g., JavaScript, Python, Design">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+    </main>
+    
+    <div id="toast" class="toast"></div>
+    <div id="footer-container"></div>
+    
+    <script type="module" src="../js/worker/profile.js"></script>
+    <script type="module" src="../js/components/navbar.js"></script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAYBURST - Real-time Micro-Job Marketplace for Students</title>
+    <link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="landing-navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo-circle">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Money Bag -->
+                        <path d="M20 12C20 12 15 14 15 18V28C15 30 17 32 20 32C23 32 25 30 25 28V18C25 14 20 12 20 12Z" fill="#C4B0E8"/>
+                        <text x="20" y="26" text-anchor="middle" fill="#1A1A2E" font-size="12" font-weight="bold">₹</text>
+                        <!-- Graduation Cap -->
+                        <path d="M20 8L12 12L20 16L28 12L20 8Z" fill="#1A1A2E"/>
+                        <path d="M28 12V16L20 20L12 16V12" stroke="#1A1A2E" stroke-width="1" fill="none"/>
+                    </svg>
+                </div>
+                <span class="brand-name">
+                    <span class="brand-pay">PAY</span><span class="brand-burst">BURST</span>
+                </span>
+            </div>
+            
+            <div class="nav-center" id="nav-links">
+                <a href="/worker/browse.html">Browse Jobs</a>
+                <a href="/worker/dashboard.html">My Active Jobs</a>
+                <a href="/worker/recommended.html">Best Jobs For Me</a>
+                <a href="/worker/dashboard.html">Dashboard</a>
+                <a href="/client/post-job.html">Post Job</a>
+                <a href="/client/my-jobs.html">My Jobs</a>
+            </div>
+            
+            <div class="nav-right">
+                <span class="location">📍 Bangalore</span>
+                <button class="icon-btn" title="Notifications">🔔</button>
+                <button class="icon-btn" title="Settings">⚙️</button>
+                <div class="avatar-circle" id="user-avatar">V</div>
+                <button class="logout-btn" id="logout-btn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <!-- Logo -->
+            <div class="hero-logo">
+                <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer Circle -->
+                    <circle cx="80" cy="80" r="78" fill="white" stroke="#9B6FD4" stroke-width="4"/>
+                    
+                    <!-- Money Bag -->
+                    <path d="M80 50C80 50 60 56 60 72V112C60 120 68 128 80 128C92 128 100 120 100 112V72C100 56 80 50 80 50Z" fill="#C4B0E8"/>
+                    <circle cx="80" cy="90" r="20" fill="#9B6FD4" opacity="0.3"/>
+                    <text x="80" y="100" text-anchor="middle" fill="#1A1A2E" font-size="32" font-weight="bold">₹</text>
+                    
+                    <!-- Graduation Cap -->
+                    <path d="M80 32L48 48L80 64L112 48L80 32Z" fill="#1A1A2E"/>
+                    <path d="M112 48V64L80 80L48 64V48" stroke="#1A1A2E" stroke-width="3" fill="none"/>
+                    <line x1="112" y1="48" x2="112" y2="72" stroke="#1A1A2E" stroke-width="2"/>
+                    
+                    <!-- Bottom Text -->
+                    <text x="80" y="150" text-anchor="middle" fill="#9B6FD4" font-size="10" font-weight="600" letter-spacing="2">PAYBURST</text>
+                </svg>
+            </div>
+            
+            <!-- Brand Name -->
+            <h1 class="hero-title">
+                <span class="title-pay">PAY</span><span class="title-burst">BURST</span>
+            </h1>
+            
+            <!-- Tagline -->
+            <p class="hero-tagline">Real-time Micro-Job Marketplace for Students</p>
+            
+            <!-- Feature Pills -->
+            <div class="feature-pills">
+                <span>Dynamic pricing</span>
+                <span>•</span>
+                <span>Group collaboration</span>
+                <span>•</span>
+                <span>Escrow protection</span>
+                <span>•</span>
+                <span>Trust fund disputes</span>
+            </div>
+            
+            <!-- CTA Buttons -->
+            <div class="cta-buttons">
+                <button class="cta-btn cta-browse" onclick="window.location.href='/worker/browse.html'">
+                    Browse Jobs
+                </button>
+                <button class="cta-btn cta-post" onclick="window.location.href='/client/post-job.html'">
+                    Post a Job
+                </button>
+                <button class="cta-btn cta-dashboard" id="dashboard-btn">
+                    My Dashboard
+                </button>
+                <button class="cta-btn cta-jobs" id="jobs-btn">
+                    My Jobs
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <div class="cards-container">
+            <div class="feature-card">
+                <div class="card-icon">📋</div>
+                <h3 class="card-title">Post a Job</h3>
+                <p class="card-desc">Clients post micro-tasks with price, deadline, and mode</p>
+            </div>
+            <div class="feature-card">
+                <div class="card-icon">⚡</div>
+                <h3 class="card-title">Workers Bid or Accept</h3>
+                <p class="card-desc">Solo or group workers take on tasks instantly</p>
+            </div>
+            <div class="feature-card">
+                <div class="card-icon">✅</div>
+                <h3 class="card-title">Get Paid Securely</h3>
+                <p class="card-desc">Escrow holds funds, released on approval</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Features Section -->
+    <section class="platform-features">
+        <h2 class="section-title-white">Why PAYBURST?</h2>
+        <div class="features-grid">
+            <div class="feature-card-dark">
+                <div class="feature-icon">🏆</div>
+                <h3 class="feature-title">Auction Mode</h3>
+                <p class="feature-desc">Urgent jobs go to auction. Workers bid UP.</p>
+            </div>
+            <div class="feature-card-dark">
+                <div class="feature-icon">👥</div>
+                <h3 class="feature-title">Group Collaboration</h3>
+                <p class="feature-desc">Form teams, split earnings automatically</p>
+            </div>
+            <div class="feature-card-dark">
+                <div class="feature-icon">🛡️</div>
+                <h3 class="feature-title">Escrow Protection</h3>
+                <p class="feature-desc">Funds locked until work is approved</p>
+            </div>
+            <div class="feature-card-dark">
+                <div class="feature-icon">💰</div>
+                <h3 class="feature-title">Trust Fund</h3>
+                <p class="feature-desc">1% of every job builds platform insurance</p>
+            </div>
+            <div class="feature-card-dark">
+                <div class="feature-icon">⭐</div>
+                <h3 class="feature-title">Reputation System</h3>
+                <p class="feature-desc">Ratings follow workers across all jobs</p>
+            </div>
+            <div class="feature-card-dark">
+                <div class="feature-icon">⏰</div>
+                <h3 class="feature-title">Deadline Flexibility</h3>
+                <p class="feature-desc">Extend deadlines with transparent penalties</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <p class="footer-title">PAYBURST — Real-time Micro-Job Marketplace for Students</p>
+        <p class="footer-subtitle">Built for hackathon. Designed for the future.</p>
+    </footer>
+
+    <script type="module" src="js/landing.js"></script>
+</body>
+</html>

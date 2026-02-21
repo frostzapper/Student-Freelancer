@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - FlashWork</title>
+    <link rel="stylesheet" href="../css/global.css?v=2">
+    <link rel="stylesheet" href="../css/layout.css?v=2">
+    <link rel="stylesheet" href="../css/components.css?v=2">
+    <link rel="stylesheet" href="../css/client.css?v=2">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main>
+        <div class="dashboard-container">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <div>
+                    <h1>Client Dashboard</h1>
+                    <p class="dashboard-subtitle">Manage your posted jobs and wallet</p>
+                </div>
+                <button class="btn btn-primary btn-large" onclick="window.location.href='/client/post-job.html'">
+                    ➕ Post a Job
+                </button>
+            </div>
+            
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <!-- Wallet Balance Card -->
+                <div class="stat-card wallet-card">
+                    <div class="stat-icon">💰</div>
+                    <h3>Wallet Balance</h3>
+                    <div class="stat-value" id="wallet-balance">₹0</div>
+                    <button class="btn btn-secondary btn-small" onclick="window.location.href='/client/wallet.html'">
+                        Top Up
+                    </button>
+                </div>
+                
+                <!-- Total Jobs -->
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <h3>Total Jobs</h3>
+                    <div class="stat-value" id="total-jobs">0</div>
+                </div>
+                
+                <!-- Active Jobs -->
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <h3>Active Jobs</h3>
+                    <div class="stat-value" id="active-jobs">0</div>
+                </div>
+                
+                <!-- Completed Jobs -->
+                <div class="stat-card">
+                    <div class="stat-icon">✓</div>
+                    <h3>Completed</h3>
+                    <div class="stat-value" id="completed-jobs">0</div>
+                </div>
+                
+                <!-- Total Spent -->
+                <div class="stat-card">
+                    <div class="stat-icon">💸</div>
+                    <h3>Total Spent</h3>
+                    <div class="stat-value" id="total-spent">₹0</div>
+                </div>
+            </div>
+            
+            <!-- Trust Fund Info Card -->
+            <div class="trust-fund-card">
+                <div class="trust-fund-icon">🛡️</div>
+                <div class="trust-fund-info">
+                    <div class="trust-fund-label">
+                        Platform Trust Fund
+                        <span class="info-tooltip" title="1% of every approved job goes here as skill insurance">ℹ️</span>
+                    </div>
+                    <div class="trust-fund-amount" id="trust-fund-balance">₹0</div>
+                </div>
+            </div>
+            
+            <!-- Jobs Section -->
+            <div class="jobs-section">
+                <div class="section-header">
+                    <h2>My Posted Jobs</h2>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-status="all">All</button>
+                        <button class="filter-tab" data-status="open">Open</button>
+                        <button class="filter-tab" data-status="assigned">Assigned</button>
+                        <button class="filter-tab" data-status="submitted">Submitted</button>
+                        <button class="filter-tab" data-status="completed">Completed</button>
+                    </div>
+                </div>
+                
+                <!-- Loading State -->
+                <div id="loading-jobs" class="loading-state">
+                    <p>Loading your jobs...</p>
+                </div>
+                
+                <!-- Jobs Grid -->
+                <div id="jobs-grid" class="client-jobs-grid" style="display: none;"></div>
+                
+                <!-- Empty State -->
+                <div id="empty-state" class="empty-state" style="display: none;">
+                    <div class="empty-icon">📭</div>
+                    <h3 class="empty-title">No jobs posted yet</h3>
+                    <p class="empty-message">Start by posting your first job</p>
+                    <button class="btn btn-primary" onclick="window.location.href='/client/post-job.html'">
+                        Post a Job
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div id="toast" class="toast"></div>
+    <div id="footer-container"></div>
+    
+    <script type="module" src="../js/client/dashboard.js"></script>
+    <script type="module" src="../js/components/navbar.js"></script>
+</body>
+</html>

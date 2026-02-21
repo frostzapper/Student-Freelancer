@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details - FlashWork</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/client.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main>
+        <div class="job-detail-container">
+            <!-- Loading State -->
+            <div id="loading-state" class="loading-state">
+                <p>Loading job details...</p>
+            </div>
+            
+            <!-- Job Detail Content -->
+            <div id="job-detail-content" style="display: none;">
+                <!-- Header -->
+                <div class="job-detail-header">
+                    <div>
+                        <h1 id="job-title"></h1>
+                        <div class="job-meta-info">
+                            <span class="status-badge" id="job-status"></span>
+                            <span class="job-id">Job #<span id="job-id"></span></span>
+                        </div>
+                    </div>
+                    <div class="job-price-large" id="job-price"></div>
+                </div>
+                
+                <!-- Main Grid -->
+                <div class="job-detail-grid">
+                    <!-- Left Column -->
+                    <div class="job-detail-main">
+                        <!-- Description -->
+                        <div class="detail-card">
+                            <h3>Description</h3>
+                            <p id="job-description"></p>
+                        </div>
+                        
+                        <!-- Job Info -->
+                        <div class="detail-card">
+                            <h3>Job Information</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">Category</span>
+                                    <span class="info-value" id="job-category"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Work Mode</span>
+                                    <span class="info-value" id="job-work-mode"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Deadline</span>
+                                    <span class="info-value" id="job-deadline"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Estimated Hours</span>
+                                    <span class="info-value" id="job-hours"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">AI Allowed</span>
+                                    <span class="info-value" id="job-ai"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Urgent</span>
+                                    <span class="info-value" id="job-urgent"></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Extensions Used</span>
+                                    <span class="info-value" id="job-extensions"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Question File -->
+                        <div class="detail-card" id="question-file-card" style="display: none;">
+                            <h3>Attached Files</h3>
+                            <a href="#" id="question-file-link" class="file-link" target="_blank">
+                                📎 View Question File
+                            </a>
+                        </div>
+                        
+                        <!-- Submission File -->
+                        <div class="detail-card" id="submission-file-card" style="display: none;">
+                            <h3>Submitted Work</h3>
+                            <a href="#" id="submission-file-link" class="file-link" target="_blank">
+                                📎 View Submission File
+                            </a>
+                            <div class="approval-actions" id="approval-actions">
+                                <button class="btn btn-primary btn-large" id="approve-btn">
+                                    ✓ Approve Work & Release Payment
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Auction Bids -->
+                        <div class="detail-card" id="bids-card" style="display: none;">
+                            <h3>Received Bids</h3>
+                            <div id="bids-list"></div>
+                        </div>
+                        
+                        <!-- Payout Breakdown -->
+                        <div class="detail-card success-card" id="payout-card" style="display: none;">
+                            <h3>✓ Payment Released</h3>
+                            <div class="payout-breakdown">
+                                <div class="payout-item">
+                                    <span>Worker Payment</span>
+                                    <span class="payout-amount" id="worker-payout"></span>
+                                </div>
+                                <div class="payout-item">
+                                    <span>Platform Fee (1%)</span>
+                                    <span class="payout-amount" id="platform-fee"></span>
+                                </div>
+                                <div class="payout-item total">
+                                    <span>Total</span>
+                                    <span class="payout-amount" id="total-payout"></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Rating Section -->
+                            <div class="rating-section" id="rating-section" style="display: none;">
+                                <h4>Rate this worker</h4>
+                                <div class="rating-selector" id="rating-selector">
+                                    <span class="rating-star" data-rating="1">☆</span>
+                                    <span class="rating-star" data-rating="2">☆</span>
+                                    <span class="rating-star" data-rating="3">☆</span>
+                                    <span class="rating-star" data-rating="4">☆</span>
+                                    <span class="rating-star" data-rating="5">☆</span>
+                                </div>
+                                <button class="btn btn-primary" id="submit-rating" disabled>
+                                    Submit Rating
+                                </button>
+                                <div class="rating-note" id="group-rating-note" style="display: none;">
+                                    <strong>Note:</strong> This rating will apply to all group members
+                                </div>
+                            </div>
+                            
+                            <!-- Already Rated -->
+                            <div class="already-rated" id="already-rated" style="display: none;">
+                                <p>✓ You have already rated this job</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Sidebar -->
+                    <div class="job-detail-sidebar">
+                        <!-- Escrow Status -->
+                        <div class="detail-card">
+                            <h3>Escrow Status</h3>
+                            <div class="escrow-status" id="escrow-status">
+                                <div class="escrow-badge" id="escrow-badge"></div>
+                                <div class="escrow-amount" id="escrow-amount"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Worker Info -->
+                        <div class="detail-card" id="worker-card" style="display: none;">
+                            <h3>Assigned Worker</h3>
+                            <div id="worker-info"></div>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="detail-card">
+                            <h3>Actions</h3>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary" onclick="history.back()">
+                                    ← Back to Jobs
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div id="toast" class="toast"></div>
+    <div id="footer-container"></div>
+    
+    <script type="module" src="../js/client/job-detail.js"></script>
+    <script type="module" src="../js/components/navbar.js"></script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+/* Global Styles - Light Mode with Pastel Colors */
+:root {
+    /* Pastel Card Backgrounds */
+    --pastel-peach: #FDE8D8;
+    --pastel-mint: #D8F5E8;
+    --pastel-lavender: #E8D8F5;
+    --pastel-sky: #D8EAF5;
+    --pastel-cream: #FDF5D8;
+    
+    /* Main Colors */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F8F9FA;
+    --nav-bg: #000000;
+    --text-primary: #1A1A1A;
+    --text-secondary: #6B7280;
+    --text-light: #9CA3AF;
+    --border-color: #E5E7EB;
+    
+    /* Accent Colors */
+    --accent-orange: #FF6B35;
+    --accent-pink: #FF6B9D;
+    --accent-coral: #FF5757;
+    --accent-green: #10B981;
+    --accent-blue: #3B82F6;
+    
+    /* Badge Colors */
+    --badge-urgent: #FEE2E2;
+    --badge-urgent-text: #DC2626;
+    --badge-auction: #FED7AA;
+    --badge-auction-text: #EA580C;
+    --badge-ai: #DBEAFE;
+    --badge-ai-text: #2563EB;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+a:hover {
+    opacity: 0.8;
+    text-decoration: none;
+}
+
+h1, h2, h3 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background-color: #000;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    border-color: var(--text-primary);
+    background-color: var(--bg-secondary);
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+.btn-icon {
+    padding: 0.5rem;
+    border-radius: 8px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: background-color 0.2s;
+}
+
+.btn-icon:hover {
+    background-color: var(--bg-secondary);
+}
+
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 1rem 1.5rem;
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    z-index: 2000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+    max-width: 400px;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.toast.success {
+    border-color: var(--accent-green);
+    background-color: #ECFDF5;
+    color: #065F46;
+}
+
+.toast.error {
+    border-color: var(--accent-coral);
+    background-color: #FEF2F2;
+    color: #991B1B;
+}
+
+
+/* Trust Fund Card */
+.trust-fund-card {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.2s;
+}
+
+.trust-fund-card:hover {
+    border-color: var(--accent-orange);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.1);
+    transform: translateY(-2px);
+}
+
+.trust-fund-icon {
+    font-size: 2rem;
+    filter: drop-shadow(0 0 8px rgba(255, 107, 53, 0.3));
+}
+
+.trust-fund-info {
+    flex: 1;
+}
+
+.trust-fund-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-tooltip {
+    cursor: help;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.info-tooltip:hover {
+    opacity: 1;
+}
+
+.trust-fund-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.trust-fund-note {
+    margin-top: 0.5rem;
+}
+
+.trust-fund-note small {
+    color: var(--accent-orange);
+    font-size: 0.85rem;
+    font-weight: 500;
+}

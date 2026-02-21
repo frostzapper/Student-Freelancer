@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Schedule - FlashWork</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/schedule.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main>
+        <div class="schedule-container">
+            <!-- Header -->
+            <div class="schedule-header">
+                <div>
+                    <h1>📅 My Weekly Schedule</h1>
+                    <p class="schedule-subtitle">Manage your availability for the week</p>
+                </div>
+                <button class="btn btn-primary" id="add-slot-btn">
+                    ➕ Add Time Slot
+                </button>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="loading-schedule" class="loading-state">
+                <p>Loading schedule...</p>
+            </div>
+            
+            <!-- Schedule Grid -->
+            <div id="schedule-grid" class="schedule-grid" style="display: none;">
+                <!-- Monday -->
+                <div class="day-column">
+                    <div class="day-header">
+                        <h3>Monday</h3>
+                        <button class="add-day-btn" data-day="monday">+</button>
+                    </div>
+                    <div class="slots-container" data-day="monday"></div>
+                </div>
+                
+                <!-- Tuesday -->
+                <div class="day-column">
+                    <div class="day-header">
+                        <h3>Tuesday</h3>
+                        <button class="add-day-btn" data-day="tuesday">+</button>
+                    </div>
+                    <div class="slots-container" data-day="tuesday"></div>
+                </div>
+                
+                <!-- Wednesday -->
+                <div class="day-column">
+                    <div class="day-header">
+                        <h3>Wednesday</h3>
+                        <button class="add-day-btn" data-day="wednesday">+</button>
+                    </div>
+                    <div class="slots-container" data-day="wednesday"></div>
+                </div>
+                
+                <!-- Thursday -->
+                <div class="day-column">
+                    <div class="day-header">
+                        <h3>Thursday</h3>
+                        <button class="add-day-btn" data-day="thursday">+</button>
+                    </div>
+                    <div class="slots-container" data-day="thursday"></div>
+                </div>
+                
+                <!-- Friday -->
+                <div class="day-column">
+                    <div class="day-header">
+                        <h3>Friday</h3>
+                        <button class="add-day-btn" data-day="friday">+</button>
+                    </div>
+                    <div class="slots-container" data-day="friday"></div>
+                </div>
+                
+                <!-- Saturday -->
+                <div class="day-column">
+                    <div class="day-header">
+                        <h3>Saturday</h3>
+                        <button class="add-day-btn" data-day="saturday">+</button>
+                    </div>
+                    <div class="slots-container" data-day="saturday"></div>
+                </div>
+                
+                <!-- Sunday -->
+                <div class="day-column">
+                    <div class="day-header">
+                        <h3>Sunday</h3>
+                        <button class="add-day-btn" data-day="sunday">+</button>
+                    </div>
+                    <div class="slots-container" data-day="sunday"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Add Slot Modal -->
+    <div id="slot-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Add Time Slot</h3>
+                <button class="modal-close" id="close-slot-modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="slot-day">Day of Week</label>
+                    <select id="slot-day" class="form-select">
+                        <option value="monday">Monday</option>
+                        <option value="tuesday">Tuesday</option>
+                        <option value="wednesday">Wednesday</option>
+                        <option value="thursday">Thursday</option>
+                        <option value="friday">Friday</option>
+                        <option value="saturday">Saturday</option>
+                        <option value="sunday">Sunday</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="slot-start">Start Time</label>
+                        <input type="time" id="slot-start" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="slot-end">End Time</label>
+                        <input type="time" id="slot-end" required>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <p>💡 Add your available time slots for each day of the week</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-slot">Cancel</button>
+                <button class="btn btn-primary" id="submit-slot">Add Slot</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast" class="toast"></div>
+    <div id="footer-container"></div>
+    
+    <script type="module" src="../js/worker/schedule.js"></script>
+    <script type="module" src="../js/components/navbar.js"></script>
+</body>
+</html>

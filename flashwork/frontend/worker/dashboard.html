@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Dashboard - FlashWork</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/worker.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main class="dashboard">
+        <h1>Worker Dashboard</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Earnings</h3>
+                <p class="stat-value" id="total-earnings">₹0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Completed Jobs</h3>
+                <p class="stat-value" id="completed-jobs">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Active Jobs</h3>
+                <p class="stat-value" id="active-jobs">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Pending Jobs</h3>
+                <p class="stat-value" id="pending-jobs">0</p>
+            </div>
+        </div>
+        
+        <!-- Trust Fund Info Card -->
+        <div class="trust-fund-card">
+            <div class="trust-fund-icon">🛡️</div>
+            <div class="trust-fund-info">
+                <div class="trust-fund-label">
+                    Platform Trust Fund
+                    <span class="info-tooltip" title="1% of every approved job goes here as skill insurance">ℹ️</span>
+                </div>
+                <div class="trust-fund-amount" id="trust-fund-balance">₹0</div>
+            </div>
+        </div>
+        
+        <!-- Active Jobs Section -->
+        <section class="active-jobs-section">
+            <h2>My Active Jobs</h2>
+            <div id="loading-active-jobs" class="loading-state">
+                <p>Loading active jobs...</p>
+            </div>
+            <div id="active-jobs-list" class="jobs-list" style="display: none;"></div>
+            <div id="empty-active-jobs" class="empty-state" style="display: none;">
+                <div class="empty-icon">📭</div>
+                <h3 class="empty-title">No active jobs</h3>
+                <p class="empty-message">Browse available jobs to get started</p>
+                <a href="/worker/browse.html" class="btn btn-primary" style="margin-top: 1rem;">Browse Jobs</a>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Extension Warning Modal -->
+    <div id="extension-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚠️ Request Deadline Extension</h3>
+                <button class="modal-close" id="close-extension-modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-box">
+                    <p><strong>Warning:</strong> Requesting an extension will reduce your payout by 10%.</p>
+                </div>
+                <div class="extension-info">
+                    <p><strong>Current Payout:</strong> <span id="current-payout">₹0</span></p>
+                    <p><strong>New Payout:</strong> <span id="new-payout" style="color: var(--accent-pink);">₹0</span></p>
+                    <p><strong>Extensions Remaining:</strong> <span id="extensions-remaining">0</span></p>
+                </div>
+                <p style="margin-top: 1rem;">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-extension">Cancel</button>
+                <button class="btn btn-primary" id="confirm-extension">Confirm Extension</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast" class="toast"></div>
+    
+    <div id="footer-container"></div>
+    
+    <script type="module" src="../js/worker/dashboard.js"></script>
+    <script type="module" src="../js/components/navbar.js"></script>
+</body>
+</html>

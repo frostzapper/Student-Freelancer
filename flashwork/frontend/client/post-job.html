@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Job - FlashWork</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/client.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main class="post-job-page">
+        <h1>Post a Job</h1>
+        
+        <form id="post-job-form" class="job-form">
+            <div class="form-group">
+                <label for="title">Job Title *</label>
+                <input type="text" id="title" name="title" placeholder="e.g., Data Entry for 100 Records" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description *</label>
+                <textarea id="description" name="description" rows="5" placeholder="Describe the job requirements, deliverables, and any special instructions..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Category *</label>
+                <input type="text" id="category" name="category" placeholder="e.g., Data Entry, Design, Writing" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="base-price">Price (₹) *</label>
+                <input type="number" id="base-price" name="base_price" min="1" placeholder="500" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="deadline">Deadline *</label>
+                <input type="datetime-local" id="deadline" name="deadline" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="estimated-hours">Estimated Hours *</label>
+                <input type="number" id="estimated-hours" name="estimated_hours" min="1" placeholder="4" required>
+            </div>
+            
+            <div class="form-group toggle-group">
+                <label>Work Mode *</label>
+                <div class="toggle-buttons">
+                    <button type="button" class="toggle-btn active" data-value="solo" id="mode-solo">Solo</button>
+                    <button type="button" class="toggle-btn" data-value="group" id="mode-group">Group</button>
+                </div>
+                <input type="hidden" id="work-mode" name="work_mode" value="solo">
+            </div>
+            
+            <div class="form-group toggle-group">
+                <label>AI Allowed</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="ai-allowed" name="ai_allowed" class="toggle-checkbox">
+                    <label for="ai-allowed" class="toggle-label">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-text">Allow AI tools</span>
+                </div>
+            </div>
+            
+            <div class="form-group toggle-group">
+                <label>Urgent Job</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="urgent-status" name="urgent_status" class="toggle-checkbox">
+                    <label for="urgent-status" class="toggle-label">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-text">Mark as urgent</span>
+                </div>
+            </div>
+            
+            <div class="form-group toggle-group" id="auction-mode-group" style="display: none;">
+                <label>Auction Mode</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="auction-mode" name="auction_mode" class="toggle-checkbox">
+                    <label for="auction-mode" class="toggle-label">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-text">Enable bidding (workers bid UP)</span>
+                </div>
+                <small class="helper-text" style="display: none; color: var(--accent-orange); margin-top: 0.5rem;">
+                    Workers will bid above your listed price. You choose who to hire.
+                </small>
+                <small class="warning-text" style="display: none; color: var(--accent-pink); margin-top: 0.5rem;">
+                    Auction mode is only available for urgent jobs. Enable urgent first.
+                </small>
+            </div>
+            
+            <div class="form-group">
+                <label for="question-file">Question File (optional)</label>
+                <input type="file" id="question-file" name="question_file" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png">
+                <small>Upload any reference files or detailed requirements</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-large">Post Job</button>
+        </form>
+    </main>
+    
+    <div id="toast" class="toast"></div>
+    <div id="footer-container"></div>
+    
+    <script type="module" src="../js/client/post-job.js"></script>
+    <script type="module" src="../js/components/navbar.js"></script>
+</body>
+</html>

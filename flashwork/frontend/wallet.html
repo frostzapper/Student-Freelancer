@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet - FlashWork</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/wallet.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main>
+        <div class="wallet-container">
+            <!-- Header -->
+            <div class="wallet-header">
+                <h1>💰 My Wallet</h1>
+                <p class="wallet-subtitle">Manage your balance and transactions</p>
+            </div>
+            
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div class="balance-info">
+                    <h3>Current Balance</h3>
+                    <div class="balance-amount" id="wallet-balance">₹0</div>
+                </div>
+                <div class="balance-actions">
+                    <button class="btn btn-primary" id="topup-btn">
+                        ➕ Top Up
+                    </button>
+                    <button class="btn btn-secondary" id="withdraw-btn">
+                        🏦 Withdraw
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Transactions Section -->
+            <div class="transactions-section">
+                <div class="section-header">
+                    <h2>Transaction History</h2>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="credit">Credits</button>
+                        <button class="filter-btn" data-filter="debit">Debits</button>
+                    </div>
+                </div>
+                
+                <!-- Loading State -->
+                <div id="loading-transactions" class="loading-state">
+                    <p>Loading transactions...</p>
+                </div>
+                
+                <!-- Transactions List -->
+                <div id="transactions-list" class="transactions-list" style="display: none;"></div>
+                
+                <!-- Empty State -->
+                <div id="empty-transactions" class="empty-state" style="display: none;">
+                    <div class="empty-icon">📭</div>
+                    <h3 class="empty-title">No transactions yet</h3>
+                    <p class="empty-message">Your transaction history will appear here</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Top Up Modal -->
+    <div id="topup-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💰 Top Up Wallet</h3>
+                <button class="modal-close" id="close-topup-modal">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Add money to your wallet</p>
+                <div class="form-group">
+                    <label for="topup-amount">Amount (₹)</label>
+                    <input type="number" id="topup-amount" placeholder="Enter amount" min="100" max="100000">
+                    <small>Min: ₹100 | Max: ₹100,000</small>
+                </div>
+                <div class="quick-amounts">
+                    <button class="quick-amount" data-amount="500">₹500</button>
+                    <button class="quick-amount" data-amount="1000">₹1,000</button>
+                    <button class="quick-amount" data-amount="2000">₹2,000</button>
+                    <button class="quick-amount" data-amount="5000">₹5,000</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-topup">Cancel</button>
+                <button class="btn btn-primary" id="submit-topup">Top Up</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Withdraw Modal -->
+    <div id="withdraw-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🏦 Withdraw Funds</h3>
+                <button class="modal-close" id="close-withdraw-modal">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Withdraw money from your wallet to your bank account</p>
+                <div class="form-group">
+                    <label for="withdraw-amount">Amount (₹)</label>
+                    <input type="number" id="withdraw-amount" placeholder="Enter amount" min="100">
+                    <small>Min: ₹100</small>
+                </div>
+                <div class="info-box">
+                    <p>⏱️ Withdrawals are processed within 1-2 business days</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-withdraw">Cancel</button>
+                <button class="btn btn-primary" id="submit-withdraw">Withdraw</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast" class="toast"></div>
+    <div id="footer-container"></div>
+    
+    <script type="module" src="js/wallet.js"></script>
+    <script type="module" src="js/components/navbar.js"></script>
+</body>
+</html>

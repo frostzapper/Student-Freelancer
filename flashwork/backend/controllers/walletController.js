@@ -84,7 +84,23 @@ const getBalance = async (req, res) => {
       select: { wallet_balance: true }
     });
 
-    res.json({ wallet_balance: user.wallet_balance });
+    res.json({ balance: user.wallet_balance });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getTransactions = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const transactions = await prisma.paymentTransaction.findMany({
+      where: { user_id: userId },
+      orderBy: { created_at: 'desc' },
+      take: 50
+    });
+
+    res.json(transactions);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -93,5 +109,6 @@ const getBalance = async (req, res) => {
 module.exports = {
   topup,
   withdraw,
-  getBalance
+  getBalance,
+  getTransactions
 };
