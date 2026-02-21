@@ -1,5 +1,5 @@
 // API Configuration
-export const API_BASE_URL = 'fetch("https://student-freelancer-1.onrender.com//api")';
+export const API_BASE_URL = 'fetch("https://student-freelancer-1.onrender.com/api")';
 
 export const ENDPOINTS = {
     // Auth
