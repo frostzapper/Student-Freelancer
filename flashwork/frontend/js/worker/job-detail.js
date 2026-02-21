@@ -94,6 +94,60 @@ function renderJobDetails(job) {
     if (job.workerEntity && job.work_mode === 'group') {
         showGroupMembers(job);
     }
+    
+    // Handle assigned status - show submission form and Mark as Completed button
+    if (job.status === 'assigned') {
+        // Show the submission form (file input)
+        document.getElementById('submission-form').style.display = 'block';
+        
+        const actionsCard = document.querySelector('.job-detail-sidebar .detail-card:last-child .action-buttons');
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-primary';
+        btn.textContent = 'Mark as Completed';
+        btn.onclick = async () => {
+            if (!confirm('Mark this job as completed?')) return;
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Submitting...';
+                
+                // Create FormData for file upload
+                const formData = new FormData();
+                const fileInput = document.getElementById('submission-file');
+                if (fileInput.files.length > 0) {
+                    formData.append('submission_file', fileInput.files[0]);
+                }
+                
+                const res = await fetch(`${API_BASE_URL}${ENDPOINTS.JOBS}/${job.id}/submit`, {
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: formData
+                });
+                
+                if (res.ok) {
+                    location.reload();
+                } else {
+                    const error = await res.json();
+                    alert('Error: ' + (error.error || 'Failed to submit job'));
+                    btn.disabled = false;
+                    btn.textContent = 'Mark as Completed';
+                }
+            } catch (error) {
+                console.error('Error submitting job:', error);
+                alert('Error submitting job: ' + error.message);
+                btn.disabled = false;
+                btn.textContent = 'Mark as Completed';
+            }
+        };
+        actionsCard.appendChild(btn);
+    }
+    
+    // Handle submitted status - show waiting message
+    if (job.status === 'submitted') {
+        const actionsCard = document.querySelector('.job-detail-sidebar .detail-card:last-child .action-buttons');
+        actionsCard.innerHTML += '<p>⏳ Awaiting client review...</p>';
+    }
 }
 
 function setupAcceptButton(job) {

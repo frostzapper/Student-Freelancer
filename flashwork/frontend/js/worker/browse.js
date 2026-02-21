@@ -25,6 +25,20 @@ urgentCheckbox.addEventListener('change', () => {
     }
 });
 
+// Auto-reload on work-location change
+document.querySelectorAll('input[name="work-location"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        loadJobs();
+    });
+});
+
+// Auto-reload on work-mode change
+document.querySelectorAll('input[name="work-mode"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        loadJobs();
+    });
+});
+
 async function loadJobs() {
     const loadingState = document.getElementById('loading-state');
     const jobsGrid = document.getElementById('jobs-grid');
@@ -42,6 +56,10 @@ async function loadJobs() {
         const workMode = document.querySelector('input[name="work-mode"]:checked')?.value;
         if (workMode) params.append('work_mode', workMode);
         
+        const workLocation = document.querySelector('input[name="work-location"]:checked')?.value;
+        console.log('🔍 Work Location Filter:', workLocation);
+        if (workLocation) params.append('work_location', workLocation);
+        
         const urgent = document.getElementById('filter-urgent').checked;
         if (urgent) params.append('urgent_status', 'true');
         
@@ -55,9 +73,11 @@ async function loadJobs() {
         if (minPrice) params.append('min_price', minPrice);
         
         const query = params.toString() ? `?${params.toString()}` : '';
+        console.log('🌐 API Query:', `${ENDPOINTS.JOBS_OPEN}${query}`);
         const data = await apiRequest(`${ENDPOINTS.JOBS_OPEN}${query}`);
         
         allJobs = Array.isArray(data) ? data : [];
+        console.log('📦 Jobs Received:', allJobs.length);
         
         loadingState.style.display = 'none';
         
@@ -127,6 +147,12 @@ function createWorkerJobCard(job) {
     modeBadge.className = 'job-badge';
     modeBadge.textContent = job.work_mode === 'solo' ? '👤 Solo' : '👥 Group';
     badges.appendChild(modeBadge);
+    
+    // Work location badge
+    const locationBadge = document.createElement('span');
+    locationBadge.className = 'job-badge';
+    locationBadge.textContent = job.work_location === 'online' ? '🌐 Online' : '📍 Offline';
+    badges.appendChild(locationBadge);
     
     // Urgent badge
     if (job.urgent_status) {
@@ -318,6 +344,7 @@ document.getElementById('search-input').addEventListener('keyup', (e) => {
 // Reset filters
 document.getElementById('reset-filters').addEventListener('click', () => {
     document.getElementById('mode-all').checked = true;
+    document.getElementById('location-all').checked = true;
     document.getElementById('filter-urgent').checked = false;
     document.getElementById('filter-ai').checked = false;
     document.getElementById('filter-auction').checked = false;

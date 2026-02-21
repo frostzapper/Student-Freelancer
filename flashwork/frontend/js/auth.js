@@ -45,13 +45,33 @@ if (loginForm) {
         const password = document.getElementById('password').value;
         
         try {
+            console.log('Attempting login with:', email);
+            
             const data = await apiRequest(ENDPOINTS.LOGIN, {
                 method: 'POST',
                 body: JSON.stringify({ email, password })
             });
             
+            console.log('Login response received:', data);
+            
+            if (!data) {
+                throw new Error('No response from server');
+            }
+            
+            if (!data.token) {
+                console.error('Response missing token:', data);
+                throw new Error('Invalid response from server - no token received');
+            }
+            
+            if (!data.user) {
+                console.error('Response missing user:', data);
+                throw new Error('Invalid response from server - no user data received');
+            }
+            
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
+            
+            console.log('Login successful, redirecting...');
             
             // Redirect based on role
             if (data.user.role === 'worker' || data.user.role === 'both') {
@@ -60,7 +80,8 @@ if (loginForm) {
                 window.location.href = '/client/dashboard.html';
             }
         } catch (error) {
-            alert(error.message);
+            console.error('Login error:', error);
+            alert(error.message || 'Login failed. Please try again.');
         }
     });
 }
@@ -77,15 +98,18 @@ if (registerForm) {
         const role = document.getElementById('role').value;
         
         try {
-            await apiRequest(ENDPOINTS.REGISTER, {
+            const data = await apiRequest(ENDPOINTS.REGISTER, {
                 method: 'POST',
                 body: JSON.stringify({ name, email, password, role })
             });
             
+            console.log('Register response:', data);
+            
             alert('Registration successful! Please login.');
             window.location.href = '/login.html';
         } catch (error) {
-            alert(error.message);
+            console.error('Register error:', error);
+            alert(error.message || 'Registration failed. Please try again.');
         }
     });
 }

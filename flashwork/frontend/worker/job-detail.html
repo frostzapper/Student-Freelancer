@@ -150,6 +150,15 @@
                         <!-- Actions -->
                         <div class="detail-card">
                             <h3>Actions</h3>
+                            
+                            <!-- Submission Form (hidden by default, shown for assigned jobs) -->
+                            <div id="submission-form" style="display: none; margin-bottom: 15px;">
+                                <label for="submission-file" style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; color: #333;">
+                                    Upload Work File (optional)
+                                </label>
+                                <input type="file" id="submission-file" style="display: block; width: 100%; margin-bottom: 10px; font-size: 14px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                            
                             <div class="action-buttons">
                                 <button class="btn btn-secondary" onclick="history.back()">
                                     ← Back to Jobs

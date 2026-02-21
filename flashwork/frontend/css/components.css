@@ -1,14 +1,15 @@
 /* Component Styles - Modern UI */
 .navbar {
-    background-color: var(--dark-nav);
-    padding: 1rem 2rem;
+    background-color: #FFFFFF;
+    padding: 0.75rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #E5E7EB;
 }
 
 .nav-brand {
@@ -17,11 +18,34 @@
     gap: 0.75rem;
 }
 
-.nav-brand a {
+.logo-circle {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #FF6B35, #FF6B9D);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-icon {
+    font-size: 1.1rem;
+}
+
+.brand-text {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--text-primary);
     letter-spacing: -0.5px;
+}
+
+.brand-pay {
+    color: #1A1A1A;
+    font-weight: 400;
+}
+
+.brand-burst {
+    color: #1A1A1A;
+    font-weight: 900;
 }
 
 .nav-links {
@@ -35,15 +59,16 @@
     border-radius: 8px;
     font-size: 0.95rem;
     font-weight: 500;
+    color: #1A1A1A;
     transition: background-color 0.2s;
 }
 
 .nav-links a:hover {
-    background-color: var(--border-color);
+    background-color: #F3F4F6;
 }
 
 .nav-links a.active {
-    background-color: var(--border-color);
+    background-color: #F3F4F6;
 }
 
 .nav-actions {
@@ -52,24 +77,11 @@
     align-items: center;
 }
 
-.wallet-balance {
-    background-color: var(--dark-card);
-    color: var(--text-primary);
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    border: 1px solid var(--border-color);
-    display: inline-block;
-    min-width: 80px;
-    text-align: center;
-}
-
 .location-badge {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--text-secondary);
+    color: #6B7280;
     font-size: 0.9rem;
 }
 
@@ -79,10 +91,11 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s;
+    color: #1A1A1A;
 }
 
 .notification-icon:hover {
-    background-color: var(--border-color);
+    background-color: #F3F4F6;
 }
 
 .notification-dot {
@@ -91,8 +104,197 @@
     right: 8px;
     width: 8px;
     height: 8px;
-    background-color: var(--accent-pink);
+    background-color: #FF6B9D;
     border-radius: 50%;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+    color: #1A1A1A;
+}
+
+.btn-icon:hover {
+    background-color: #F3F4F6;
+}
+
+.avatar-circle {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #9B6FD4, #E8A0C0);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.btn-logout {
+    background-color: #1A1A1A;
+    color: #FFFFFF;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-logout:hover {
+    background-color: #2A2A2A;
+    transform: scale(1.05);
+}
+
+.wallet-balance {
+    background-color: #F3F4F6;
+    color: #1A1A1A;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid #E5E7EB;
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Profile Avatar Dropdown */
+.profile-dropdown-container {
+    position: relative;
+}
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #9B6FD4, #6B9FE8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    user-select: none;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(155, 111, 212, 0.3);
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    min-width: 280px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+    border: 1px solid #E5E7EB;
+}
+
+.profile-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.profile-dropdown-header {
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-avatar-large {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #9B6FD4, #6B9FE8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1A1A1A;
+    margin-bottom: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profile-email {
+    font-size: 0.8rem;
+    color: #6B7280;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profile-dropdown-divider {
+    height: 1px;
+    background-color: #E5E7EB;
+    margin: 0.5rem 0;
+}
+
+.profile-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    color: #1A1A1A;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.profile-dropdown-item:hover {
+    background-color: #F3F4F6;
+}
+
+.dropdown-icon {
+    font-size: 1.1rem;
+    width: 24px;
+    text-align: center;
+}
+
+.dropdown-label {
+    flex: 1;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.dropdown-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #9B6FD4;
 }
 
 .job-card {

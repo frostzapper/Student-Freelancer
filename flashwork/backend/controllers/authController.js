@@ -20,12 +20,16 @@ const register = async (req, res) => {
 
     const password_hash = await bcrypt.hash(password, 10);
 
+    // Set initial wallet balance based on role
+    const initialWalletBalance = role === 'client' ? 2000 : 0;
+
     const user = await prisma.user.create({
       data: {
         name,
         email,
         password_hash,
-        role
+        role,
+        wallet_balance: initialWalletBalance
       }
     });
 
@@ -42,7 +46,8 @@ const register = async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        wallet_balance: user.wallet_balance
       }
     });
   } catch (error) {

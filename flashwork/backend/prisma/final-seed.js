@@ -408,6 +408,7 @@ async function main() {
       pricing_mode: 'rising',
       deadline: getDeadline(12),
       work_mode: 'solo',
+      work_location: 'offline',
       ai_allowed: false,
       status: 'open',
       urgent_status: true,
@@ -435,6 +436,7 @@ async function main() {
       pricing_mode: 'declining',
       deadline: getDeadline(8),
       work_mode: 'solo',
+      work_location: 'offline',
       ai_allowed: false,
       status: 'open',
       urgent_status: false,
@@ -462,6 +464,7 @@ async function main() {
       pricing_mode: 'rising',
       deadline: getDeadline(48),
       work_mode: 'solo',
+      work_location: 'offline',
       ai_allowed: false,
       status: 'open',
       urgent_status: false,
@@ -489,6 +492,7 @@ async function main() {
       pricing_mode: 'declining',
       deadline: getDeadline(24),
       work_mode: 'solo',
+      work_location: 'offline',
       ai_allowed: false,
       status: 'open',
       urgent_status: true,
@@ -517,6 +521,7 @@ async function main() {
       pricing_mode: 'declining',
       deadline: getDeadline(36),
       work_mode: 'solo',
+      work_location: 'offline',
       ai_allowed: false,
       status: 'open',
       urgent_status: false,
@@ -544,6 +549,7 @@ async function main() {
       pricing_mode: 'rising',
       deadline: getDeadline(48),
       work_mode: 'solo',
+      work_location: 'offline',
       ai_allowed: false,
       status: 'open',
       urgent_status: false,
@@ -571,6 +577,7 @@ async function main() {
       pricing_mode: 'rising',
       deadline: getDeadline(24),
       work_mode: 'solo',
+      work_location: 'offline',
       ai_allowed: false,
       status: 'open',
       urgent_status: true,
@@ -599,6 +606,7 @@ async function main() {
       pricing_mode: 'declining',
       deadline: getDeadline(72),
       work_mode: 'group',
+      work_location: 'offline',
       ai_allowed: false,
       status: 'open',
       urgent_status: false,
@@ -627,6 +635,7 @@ async function main() {
       pricing_mode: 'rising',
       deadline: getDeadline(96),
       work_mode: 'solo',
+      work_location: 'online',
       ai_allowed: true,
       status: 'open',
       urgent_status: true,
@@ -1225,7 +1234,7 @@ async function main() {
   console.log('\n📊 Summary:');
   console.log('- 2 Clients created');
   console.log('- 3 Workers created');
-  console.log('- 40 Jobs created (31 Online, 8 Offline, 1 Hybrid)');
+  console.log('- 40 Jobs created (32 Online, 8 Offline)');
   console.log('- 10 Urgent Auction Mode jobs');
   console.log('- 40 Escrow records created');
   console.log('- 1 Trust Fund created');

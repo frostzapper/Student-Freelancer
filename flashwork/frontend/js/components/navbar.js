@@ -49,18 +49,39 @@ async function setupAuthenticatedNav() {
     
     navLinks.innerHTML = links;
     
+    // Setup profile avatar
+    const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+    document.getElementById('avatar-initial').textContent = initial;
+    document.getElementById('dropdown-avatar-initial').textContent = initial;
+    document.getElementById('profile-name').textContent = user.name || 'User';
+    document.getElementById('profile-email').textContent = user.email || '';
+    
     // Load wallet balance
-    const walletBalanceEl = document.getElementById('wallet-balance');
     try {
         const data = await apiRequest(ENDPOINTS.WALLET_BALANCE);
         console.log('Wallet balance data:', data);
-        walletBalanceEl.textContent = formatCurrency(data.balance);
-        walletBalanceEl.style.display = 'block';
+        const balance = formatCurrency(data.balance);
+        document.getElementById('dropdown-wallet-balance').textContent = balance;
     } catch (error) {
         console.error('Error loading balance:', error);
-        walletBalanceEl.textContent = '₹0';
-        walletBalanceEl.style.display = 'block';
+        document.getElementById('dropdown-wallet-balance').textContent = '₹0';
     }
+    
+    // Setup profile dropdown toggle
+    const profileAvatar = document.getElementById('profile-avatar');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    
+    profileAvatar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('show');
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.profile-dropdown-container')) {
+            profileDropdown.classList.remove('show');
+        }
+    });
     
     // Setup logout
     document.getElementById('logout-btn').addEventListener('click', logout);

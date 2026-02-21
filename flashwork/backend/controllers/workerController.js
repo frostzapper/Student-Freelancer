@@ -58,6 +58,63 @@ const getWorkerDashboard = async (req, res) => {
   }
 };
 
+const getWorkerJobs = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+    // If user is not a worker, return empty array
+    if (userRole !== 'worker' && userRole !== 'both') {
+      return res.json([]);
+    }
+
+    // Get all jobs where this worker is the leader or a group member
+    const jobs = await prisma.job.findMany({
+      where: {
+        workerEntity: {
+          OR: [
+            { leader_id: userId },
+            { groupMembers: { some: { worker_id: userId } } }
+          ]
+        }
+      },
+      include: {
+        workerEntity: {
+          include: {
+            groupMembers: {
+              include: {
+                worker: {
+                  select: {
+                    id: true,
+                    name: true,
+                    email: true
+                  }
+                }
+              }
+            }
+          }
+        },
+        escrow: true,
+        client: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      },
+      orderBy: {
+        created_at: 'desc'
+      }
+    });
+
+    res.json(jobs);
+  } catch (error) {
+    console.error('Error in getWorkerJobs:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const getDailyAlert = async (req, res) => {
   try {
     const workerId = req.user.id;
@@ -154,5 +211,6 @@ const getDailyAlert = async (req, res) => {
 
 module.exports = {
   getWorkerDashboard,
-  getDailyAlert
+  getDailyAlert,
+  getWorkerJobs
 };

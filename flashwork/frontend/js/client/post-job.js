@@ -8,14 +8,28 @@ requireAuth();
 requireRole(['client', 'both']);
 
 // Toggle button handlers for work mode
-const modeButtons = document.querySelectorAll('.toggle-buttons .toggle-btn');
+const modeButtons = document.querySelectorAll('#mode-solo, #mode-group');
 const workModeInput = document.getElementById('work-mode');
 
 modeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
+        // Only remove active from mode buttons
         modeButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         workModeInput.value = btn.dataset.value;
+    });
+});
+
+// Toggle button handlers for work location
+const locationButtons = document.querySelectorAll('#location-online, #location-offline');
+const workLocationInput = document.getElementById('work-location');
+
+locationButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Only remove active from location buttons
+        locationButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        workLocationInput.value = btn.dataset.value;
     });
 });
 

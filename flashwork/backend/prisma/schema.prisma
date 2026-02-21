@@ -45,6 +45,7 @@ model Job {
   pricing_mode         String
   deadline             DateTime
   work_mode            String
+  work_location        String         @default("online")
   ai_allowed           Boolean
   question_file_url    String?
   submission_file_url  String?

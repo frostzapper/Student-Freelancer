@@ -121,6 +121,80 @@ function renderJobDetails(job) {
     if (job.status === 'completed' && job.escrow && !job.escrow.locked) {
         showPayoutBreakdown(job);
     }
+    
+    // Handle submitted status - show approve/reject buttons (ALWAYS show for submitted status)
+    if (job.status === 'submitted') {
+        const actionsCard = document.querySelector('.job-detail-sidebar .detail-card:last-child .action-buttons');
+        
+        // Remove any existing panel first
+        const existingPanel = actionsCard.querySelector('.review-panel');
+        if (existingPanel) {
+            existingPanel.remove();
+        }
+        
+        const panel = document.createElement('div');
+        panel.className = 'review-panel';
+        panel.innerHTML = `<h3 style="margin-bottom: 15px; color: #f59e0b;">Worker submitted this job. Review below:</h3><button id="approve-btn-action" style="background:#22c55e;color:white;padding:10px 20px;border:none;border-radius:8px;margin-right:10px;cursor:pointer;margin-bottom:10px;">✅ Approve & Release Payment</button><button id="reject-btn" style="background:#ef4444;color:white;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;">❌ Reject & Request Changes</button>`;
+        actionsCard.appendChild(panel);
+        
+        document.getElementById('approve-btn-action').onclick = async () => {
+            if (!confirm('Release payment to worker?')) return;
+            try {
+                const approveBtn = document.getElementById('approve-btn-action');
+                approveBtn.disabled = true;
+                approveBtn.textContent = 'Processing...';
+                
+                const res = await fetch(`${API_BASE_URL}${ENDPOINTS.JOBS}/${job.id}/approve`, { 
+                    method: 'POST', 
+                    headers: { 
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    } 
+                });
+                
+                if (res.ok) {
+                    location.reload();
+                } else {
+                    const error = await res.json();
+                    alert('Error: ' + (error.error || 'Failed to approve job'));
+                    approveBtn.disabled = false;
+                    approveBtn.textContent = '✅ Approve & Release Payment';
+                }
+            } catch (error) {
+                console.error('Error approving job:', error);
+                alert('Error approving job: ' + error.message);
+            }
+        };
+        
+        document.getElementById('reject-btn').onclick = async () => {
+            if (!confirm('Send back to worker?')) return;
+            try {
+                const rejectBtn = document.getElementById('reject-btn');
+                rejectBtn.disabled = true;
+                rejectBtn.textContent = 'Processing...';
+                
+                const res = await fetch(`${API_BASE_URL}${ENDPOINTS.JOBS}/${job.id}/reject`, { 
+                    method: 'POST', 
+                    headers: { 
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    } 
+                });
+                
+                if (res.ok) {
+                    location.reload();
+                } else {
+                    const error = await res.json();
+                    alert('Error: ' + (error.error || 'Failed to reject job'));
+                    rejectBtn.disabled = false;
+                    rejectBtn.textContent = '❌ Reject & Request Changes';
+                }
+            } catch (error) {
+                console.error('Error rejecting job:', error);
+                alert('Error rejecting job: ' + error.message);
+            }
+        };
+    }
 }
 
 function setupApproveButton(job) {

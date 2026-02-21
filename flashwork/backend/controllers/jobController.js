@@ -9,6 +9,7 @@ const createJob = async (req, res) => {
       pricing_mode,
       deadline,
       work_mode,
+      work_location,
       ai_allowed,
       estimated_hours,
       urgent_status,
@@ -58,6 +59,7 @@ const createJob = async (req, res) => {
         pricing_mode,
         deadline: new Date(deadline),
         work_mode,
+        work_location: work_location || 'online',
         ai_allowed: ai_allowed === 'true' || ai_allowed === true,
         question_file_url,
         status: 'open',
@@ -91,7 +93,10 @@ const createJob = async (req, res) => {
 
 const getOpenJobs = async (req, res) => {
   try {
-    const { urgent_status, work_mode, ai_allowed, auction_mode, min_price, max_price } = req.query;
+    const { urgent_status, work_mode, work_location, ai_allowed, auction_mode, min_price, max_price } = req.query;
+
+    console.log('🔍 Received query params:', req.query);
+    console.log('📍 work_location filter:', work_location);
 
     const where = {
       status: 'open'
@@ -103,6 +108,11 @@ const getOpenJobs = async (req, res) => {
 
     if (work_mode) {
       where.work_mode = work_mode;
+    }
+
+    if (work_location) {
+      where.work_location = work_location;
+      console.log('✅ Filtering by work_location:', work_location);
     }
 
     if (ai_allowed !== undefined) {
@@ -123,6 +133,8 @@ const getOpenJobs = async (req, res) => {
       }
     }
 
+    console.log('🔎 Prisma where clause:', JSON.stringify(where, null, 2));
+
     const jobs = await prisma.job.findMany({
       where,
       orderBy: {
@@ -136,6 +148,7 @@ const getOpenJobs = async (req, res) => {
         pricing_mode: true,
         deadline: true,
         work_mode: true,
+        work_location: true,
         ai_allowed: true,
         question_file_url: true,
         urgent_status: true,
@@ -145,6 +158,8 @@ const getOpenJobs = async (req, res) => {
         created_at: true
       }
     });
+
+    console.log('📦 Jobs found:', jobs.length);
 
     res.json(jobs);
   } catch (error) {
@@ -1093,6 +1108,21 @@ getWorkerBidInfo = async (req, res) => {
   }
 };
 
+const rejectJob = async (req, res) => {
+  try {
+    const jobId = parseInt(req.params.id);
+    const clientId = req.user.id;
+    const job = await prisma.job.findUnique({ where: { id: jobId } });
+    if (!job) return res.status(404).json({ error: 'Job not found' });
+    if (job.client_id !== clientId) return res.status(403).json({ error: 'Not authorized' });
+    if (job.status !== 'submitted') return res.status(400).json({ error: 'Job is not submitted' });
+    const updatedJob = await prisma.job.update({ where: { id: jobId }, data: { status: 'assigned' } });
+    res.json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createJob,
   getOpenJobs,
@@ -1107,5 +1137,6 @@ module.exports = {
   selectWorker,
   rateJob,
   getRecommendedJobs,
-  getWorkerBidInfo
+  getWorkerBidInfo,
+  rejectJob
 };

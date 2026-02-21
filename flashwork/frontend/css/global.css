@@ -7,14 +7,18 @@
     --pastel-sky: #D8EAF5;
     --pastel-cream: #FDF5D8;
     
-    /* Main Colors */
-    --bg-primary: #FFFFFF;
+    /* Main Colors - Light Mode Theme */
+    --bg-primary: #EDE9F6;
     --bg-secondary: #F8F9FA;
-    --nav-bg: #000000;
+    --nav-bg: #1A1A1A;
     --text-primary: #1A1A1A;
     --text-secondary: #6B7280;
     --text-light: #9CA3AF;
     --border-color: #E5E7EB;
+    
+    /* Card Background */
+    --dark-card: #FFFFFF;
+    --dark-bg: #F8F9FA;
     
     /* Accent Colors */
     --accent-orange: #FF6B35;
@@ -23,6 +27,12 @@
     --accent-green: #10B981;
     --accent-blue: #3B82F6;
     
+    /* Button Colors */
+    --btn-primary: #7C5CBF;
+    --btn-secondary: #9B6FD4;
+    --btn-pink: #E8A0C0;
+    --btn-light-pink: #F0B8C8;
+    
     /* Badge Colors */
     --badge-urgent: #FEE2E2;
     --badge-urgent-text: #DC2626;
@@ -30,6 +40,13 @@
     --badge-auction-text: #EA580C;
     --badge-ai: #DBEAFE;
     --badge-ai-text: #2563EB;
+    
+    /* Pastel Colors (for job cards) */
+    --pastel-orange: #FDE8D8;
+    --pastel-green: #D8F5E8;
+    --pastel-purple: #E8D8F5;
+    --pastel-blue: #D8EAF5;
+    --pastel-yellow: #FDF5D8;
 }
 
 * {
@@ -40,7 +57,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.6;
 }
@@ -158,7 +175,7 @@ h1, h2, h3 {
 
 /* Trust Fund Card */
 .trust-fund-card {
-    background-color: #fff;
+    background-color: var(--dark-card);
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 1.25rem 1.5rem;
@@ -186,7 +203,7 @@ h1, h2, h3 {
 
 .trust-fund-label {
     font-size: 0.9rem;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
     display: flex;
     align-items: center;
@@ -198,6 +215,7 @@ h1, h2, h3 {
     font-size: 0.85rem;
     opacity: 0.7;
     transition: opacity 0.2s;
+    color: var(--text-secondary);
 }
 
 .info-tooltip:hover {
@@ -207,9 +225,7 @@ h1, h2, h3 {
 .trust-fund-amount {
     font-size: 1.5rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--accent-orange);
 }
 
 .trust-fund-note {

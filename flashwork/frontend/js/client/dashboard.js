@@ -95,14 +95,32 @@ function updateStats(jobs) {
 function renderJobs(jobs) {
     const jobsGrid = document.getElementById('jobs-grid');
     const emptyState = document.getElementById('empty-state');
+    const pendingReviewSection = document.getElementById('pending-review-section');
+    const pendingReviewGrid = document.getElementById('pending-review-grid');
     
-    // Filter jobs based on current filter
-    let filteredJobs = jobs;
-    if (currentFilter !== 'all') {
-        filteredJobs = jobs.filter(j => j.status === currentFilter);
+    // Separate submitted jobs for pending review section
+    const submittedJobs = jobs.filter(j => j.status === 'submitted');
+    const otherJobs = jobs.filter(j => j.status !== 'submitted');
+    
+    // Show pending review section if there are submitted jobs
+    if (submittedJobs.length > 0) {
+        pendingReviewSection.style.display = 'block';
+        pendingReviewGrid.innerHTML = '';
+        submittedJobs.forEach(job => {
+            const card = createPendingReviewCard(job);
+            pendingReviewGrid.appendChild(card);
+        });
+    } else {
+        pendingReviewSection.style.display = 'none';
     }
     
-    if (filteredJobs.length === 0) {
+    // Filter jobs based on current filter
+    let filteredJobs = otherJobs;
+    if (currentFilter !== 'all') {
+        filteredJobs = otherJobs.filter(j => j.status === currentFilter);
+    }
+    
+    if (filteredJobs.length === 0 && submittedJobs.length === 0) {
         jobsGrid.style.display = 'none';
         emptyState.style.display = 'block';
         return;
@@ -116,6 +134,62 @@ function renderJobs(jobs) {
         const card = createClientJobCard(job);
         jobsGrid.appendChild(card);
     });
+}
+
+function createPendingReviewCard(job) {
+    const card = document.createElement('div');
+    card.className = 'client-job-card pending-review-highlight';
+    card.style.border = '2px solid #f59e0b';
+    card.style.background = 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)';
+    
+    // Status badge
+    const statusBadge = document.createElement('div');
+    statusBadge.className = 'job-status-badge status-submitted';
+    statusBadge.textContent = 'SUBMITTED';
+    statusBadge.style.background = '#f59e0b';
+    
+    // Job header
+    const header = document.createElement('div');
+    header.className = 'client-job-header';
+    header.appendChild(statusBadge);
+    
+    // Job title
+    const title = document.createElement('h3');
+    title.className = 'client-job-title';
+    title.textContent = job.title;
+    
+    // Job meta
+    const meta = document.createElement('div');
+    meta.className = 'client-job-meta';
+    meta.innerHTML = `<span class="meta-item">⏰ Awaiting your review</span>`;
+    
+    // Job footer
+    const footer = document.createElement('div');
+    footer.className = 'client-job-footer';
+    
+    const price = document.createElement('div');
+    price.className = 'client-job-price';
+    price.textContent = formatCurrency(job.current_price || job.base_price);
+    
+    const reviewBtn = document.createElement('button');
+    reviewBtn.className = 'btn btn-primary btn-small';
+    reviewBtn.textContent = '👁️ Review Now';
+    reviewBtn.style.background = '#f59e0b';
+    reviewBtn.onclick = (e) => {
+        e.stopPropagation();
+        window.location.href = `/client/job-detail.html?id=${job.id}`;
+    };
+    
+    footer.appendChild(price);
+    footer.appendChild(reviewBtn);
+    
+    // Assemble card
+    card.appendChild(header);
+    card.appendChild(title);
+    card.appendChild(meta);
+    card.appendChild(footer);
+    
+    return card;
 }
 
 function createClientJobCard(job) {
