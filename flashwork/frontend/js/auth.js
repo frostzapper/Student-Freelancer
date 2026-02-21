@@ -50,6 +50,15 @@ if (loginForm) {
                 body: JSON.stringify({ email, password })
             });
             
+            // Check if data exists (apiRequest might return undefined on redirect)
+            if (!data) {
+                return;
+            }
+            
+            if (!data.token || !data.user) {
+                throw new Error('Invalid response from server');
+            }
+            
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
             
@@ -60,7 +69,7 @@ if (loginForm) {
                 window.location.href = '/client/dashboard.html';
             }
         } catch (error) {
-            alert(error.message);
+            alert(error.message || 'Login failed. Please try again.');
         }
     });
 }

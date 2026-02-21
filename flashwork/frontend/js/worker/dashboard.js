@@ -52,8 +52,8 @@ async function loadActiveJobs() {
         jobsList.style.display = 'none';
         emptyState.style.display = 'none';
         
-        // Fetch all jobs and filter for active ones assigned to this worker
-        const allJobs = await apiRequest(ENDPOINTS.JOBS);
+        // Fetch worker's assigned jobs
+        const allJobs = await apiRequest(ENDPOINTS.WORKER_JOBS);
         
         // Filter for jobs where this worker is assigned and status is 'assigned'
         const activeJobs = allJobs.filter(job => 

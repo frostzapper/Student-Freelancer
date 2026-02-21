@@ -15,6 +15,7 @@ export const ENDPOINTS = {
     // Worker
     WORKER_DASHBOARD: '/workers/dashboard',
     WORKER_DAILY_ALERT: '/workers/daily-alert',
+    WORKER_JOBS: '/jobs',
     
     // Wallet
     WALLET_BALANCE: '/wallet/balance',
