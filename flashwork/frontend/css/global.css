@@ -30,6 +30,31 @@
     --badge-auction-text: #EA580C;
     --badge-ai: #DBEAFE;
     --badge-ai-text: #2563EB;
+    
+    /* Animation Durations */
+    --duration-instant: 100ms;
+    --duration-fast: 200ms;
+    --duration-normal: 300ms;
+    --duration-slow: 400ms;
+    --duration-very-slow: 600ms;
+    --duration-counter: 1000ms;
+    --duration-shimmer: 1500ms;
+    
+    /* Easing Functions */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    /* Animation Distances */
+    --distance-small: 5px;
+    --distance-medium: 20px;
+    --distance-large: 30px;
+    
+    /* Ripple Effect Settings */
+    --ripple-duration: 600ms;
+    --ripple-opacity: 0.3;
+    --ripple-scale: 2.5;
 }
 
 * {
@@ -69,10 +94,23 @@ h1, h2, h3 {
     cursor: pointer;
     font-size: 0.95rem;
     font-weight: 600;
-    transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--duration-fast) var(--ease-out),
+                box-shadow var(--duration-fast) var(--ease-out),
+                background-color var(--duration-fast) var(--ease-out);
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+.btn:active {
+    transform: scale(0.95);
+    transition-duration: var(--duration-instant);
 }
 
 .btn-primary {
@@ -82,8 +120,11 @@ h1, h2, h3 {
 
 .btn-primary:hover {
     background-color: #333;
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:active {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-secondary {
@@ -131,15 +172,17 @@ h1, h2, h3 {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     z-index: 2000;
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
+    transform: translateX(calc(100% + 2rem));
+    transition: transform var(--duration-normal) var(--ease-out),
+                opacity var(--duration-normal) var(--ease-out);
     pointer-events: none;
     max-width: 400px;
+    overflow: hidden;
 }
 
 .toast.show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
     pointer-events: auto;
 }
 
@@ -155,6 +198,28 @@ h1, h2, h3 {
     color: #991B1B;
 }
 
+/* Toast Progress Bar */
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: currentColor;
+    opacity: 0.3;
+    width: 100%;
+    transform-origin: left;
+    animation: toast-progress-animation linear forwards;
+}
+
+@keyframes toast-progress-animation {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
 
 /* Trust Fund Card */
 .trust-fund-card {
@@ -166,13 +231,16 @@ h1, h2, h3 {
     display: flex;
     align-items: center;
     gap: 1rem;
-    transition: all 0.2s;
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out),
+                border-color var(--duration-normal) var(--ease-out);
 }
 
 .trust-fund-card:hover {
     border-color: var(--accent-orange);
-    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.1);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 107, 53, 0.15),
+                0 0 0 1px rgba(255, 107, 53, 0.2);
+    transform: translateY(calc(-1 * var(--distance-small)));
 }
 
 .trust-fund-icon {

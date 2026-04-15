@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-const connectDatabase = async () => {
+const connectDatabase = async () => { 
   try {
     await prisma.$connect();
     console.log('Database connected successfully');

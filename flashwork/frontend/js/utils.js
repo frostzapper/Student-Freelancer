@@ -49,17 +49,32 @@ export function debounce(func, wait) {
     };
 }
 
-export function showToast(message, type = 'info') {
+export function showToast(message, type = 'info', duration = 3000) {
     const toast = document.getElementById('toast');
     if (!toast) {
         console.warn('Toast element not found');
         return;
     }
     
-    toast.textContent = message;
+    // Clear any existing content
+    toast.innerHTML = '';
+    
+    // Add message
+    const messageSpan = document.createElement('span');
+    messageSpan.textContent = message;
+    toast.appendChild(messageSpan);
+    
+    // Add progress bar
+    const progressBar = document.createElement('div');
+    progressBar.className = 'toast-progress';
+    progressBar.style.animationDuration = `${duration}ms`;
+    toast.appendChild(progressBar);
+    
+    // Set toast type and show
     toast.className = `toast toast-${type} show`;
     
+    // Auto-dismiss after duration
     setTimeout(() => {
         toast.className = 'toast';
-    }, 3000);
+    }, duration);
 }

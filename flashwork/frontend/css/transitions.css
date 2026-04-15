@@ -1,0 +1,246 @@
+/* Page and Component Transitions */
+
+/* ============================================
+   Page Transitions
+   ============================================ */
+
+/* Page transition container */
+.page-transition-container {
+    animation-fill-mode: both;
+}
+
+/* Page Enter Animation */
+.page-transition-enter {
+    animation: page-enter var(--duration-normal) var(--ease-out) forwards;
+}
+
+@keyframes page-enter {
+    from {
+        opacity: 0;
+        transform: translateX(var(--distance-medium));
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Page Exit Animation */
+.page-transition-exit {
+    animation: page-exit var(--duration-fast) var(--ease-in) forwards;
+}
+
+@keyframes page-exit {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(calc(-1 * var(--distance-medium)));
+    }
+}
+
+/* ============================================
+   Modal Transitions
+   ============================================ */
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.modal-overlay.show {
+    opacity: 1;
+}
+
+/* Modal with backdrop blur */
+.modal-overlay.backdrop-blur {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: opacity var(--duration-fast) var(--ease-out),
+                backdrop-filter var(--duration-fast) var(--ease-out);
+}
+
+/* Fallback for browsers without backdrop-filter */
+.no-backdrop-filter .modal-overlay.backdrop-blur {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: var(--bg-primary);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform var(--duration-normal) var(--ease-out),
+                opacity var(--duration-normal) var(--ease-out);
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Modal Close Animation */
+.modal-overlay.closing {
+    opacity: 0;
+    transition-duration: var(--duration-fast);
+}
+
+.modal-overlay.closing .modal-content {
+    transform: scale(0.9);
+    opacity: 0;
+    transition-duration: var(--duration-fast);
+}
+
+/* ============================================
+   Dropdown Transitions
+   ============================================ */
+
+.dropdown-menu {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--distance-small)));
+    pointer-events: none;
+    transition: opacity var(--duration-fast) var(--ease-out),
+                transform var(--duration-fast) var(--ease-out);
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* ============================================
+   Form Input Transitions
+   ============================================ */
+
+.form-input {
+    transition: border-color var(--duration-fast) var(--ease-out),
+                box-shadow var(--duration-fast) var(--ease-out),
+                background-color var(--duration-fast) var(--ease-out);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input.error {
+    border-color: var(--accent-coral);
+}
+
+.form-input.error:focus {
+    box-shadow: 0 0 0 3px rgba(255, 87, 87, 0.1);
+}
+
+.form-input.success {
+    border-color: var(--accent-green);
+}
+
+.form-input.success:focus {
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Floating Label Animation */
+.form-group {
+    position: relative;
+}
+
+.form-label-floating {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+    transition: transform var(--duration-fast) var(--ease-out),
+                font-size var(--duration-fast) var(--ease-out),
+                color var(--duration-fast) var(--ease-out);
+}
+
+.form-input:focus + .form-label-floating,
+.form-input:not(:placeholder-shown) + .form-label-floating {
+    transform: translateY(-2rem);
+    font-size: 0.75rem;
+    color: var(--accent-blue);
+}
+
+/* ============================================
+   Accordion Transitions
+   ============================================ */
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--duration-slow) var(--ease-out);
+}
+
+.accordion-item.is-open .accordion-content {
+    max-height: 1000px;
+}
+
+.accordion-icon {
+    transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.accordion-item.is-open .accordion-icon {
+    transform: rotate(180deg);
+}
+
+/* ============================================
+   Tab Transitions
+   ============================================ */
+
+.tab-content {
+    opacity: 0;
+    transform: translateX(var(--distance-medium));
+    transition: opacity var(--duration-normal) var(--ease-out),
+                transform var(--duration-normal) var(--ease-out);
+    display: none;
+}
+
+.tab-content.active {
+    opacity: 1;
+    transform: translateX(0);
+    display: block;
+}
+
+/* ============================================
+   Reduced Motion Support
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .page-transition-enter,
+    .page-transition-exit,
+    .modal-content,
+    .dropdown-menu,
+    .accordion-content,
+    .tab-content {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .modal-overlay.backdrop-blur {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}

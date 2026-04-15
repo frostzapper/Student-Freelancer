@@ -1,0 +1,311 @@
+/* Core Animation System - Elegant UI Animations */
+
+/* ============================================
+   CSS Custom Properties - Animation Variables
+   ============================================ */
+:root {
+  /* Animation Durations */
+  --duration-instant: 100ms;
+  --duration-fast: 200ms;
+  --duration-normal: 300ms;
+  --duration-slow: 400ms;
+  --duration-very-slow: 600ms;
+  --duration-counter: 1000ms;
+  --duration-shimmer: 1500ms;
+  
+  /* Easing Functions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Animation Distances */
+  --distance-small: 5px;
+  --distance-medium: 20px;
+  --distance-large: 30px;
+  
+  /* Ripple Effect */
+  --ripple-duration: 600ms;
+  --ripple-opacity: 0.3;
+  
+  /* Shimmer Effect */
+  --shimmer-color-start: rgba(255, 255, 255, 0);
+  --shimmer-color-mid: rgba(255, 255, 255, 0.5);
+  --shimmer-color-end: rgba(255, 255, 255, 0);
+}
+
+/* ============================================
+   Keyframe Animations
+   ============================================ */
+
+/* Fade Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Slide In Animations */
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--distance-large));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--distance-large)));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--distance-medium)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(var(--distance-medium));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide Out Animations */
+@keyframes slide-out-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--distance-large)));
+  }
+}
+
+@keyframes slide-out-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(var(--distance-large));
+  }
+}
+
+@keyframes slide-out-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--distance-medium)));
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(var(--distance-medium));
+  }
+}
+
+/* Scale Animations */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+/* Shimmer Effect */
+@keyframes shimmer-effect {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Ripple Effect */
+@keyframes ripple-animation {
+  from {
+    transform: scale(0);
+    opacity: var(--ripple-opacity);
+  }
+  to {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   Utility Classes - Reusable Animations
+   ============================================ */
+
+/* Fade Utilities */
+.fade-in {
+  animation: fade-in var(--duration-normal) var(--ease-out) forwards;
+}
+
+.fade-out {
+  animation: fade-out var(--duration-normal) var(--ease-in) forwards;
+}
+
+/* Slide In Utilities */
+.slide-in-up {
+  animation: slide-in-up var(--duration-slow) var(--ease-out) forwards;
+}
+
+.slide-in-down {
+  animation: slide-in-down var(--duration-slow) var(--ease-out) forwards;
+}
+
+.slide-in-left {
+  animation: slide-in-left var(--duration-normal) var(--ease-out) forwards;
+}
+
+.slide-in-right {
+  animation: slide-in-right var(--duration-normal) var(--ease-out) forwards;
+}
+
+/* Slide Out Utilities */
+.slide-out-up {
+  animation: slide-out-up var(--duration-normal) var(--ease-in) forwards;
+}
+
+.slide-out-down {
+  animation: slide-out-down var(--duration-normal) var(--ease-in) forwards;
+}
+
+.slide-out-left {
+  animation: slide-out-left var(--duration-normal) var(--ease-in) forwards;
+}
+
+.slide-out-right {
+  animation: slide-out-right var(--duration-normal) var(--ease-in) forwards;
+}
+
+/* Scale Utilities */
+.scale-in {
+  animation: scale-in var(--duration-normal) var(--ease-out) forwards;
+}
+
+.scale-out {
+  animation: scale-out var(--duration-fast) var(--ease-in) forwards;
+}
+
+/* Shimmer Utility */
+.shimmer-effect {
+  background: linear-gradient(
+    90deg,
+    var(--shimmer-color-start) 0%,
+    var(--shimmer-color-mid) 50%,
+    var(--shimmer-color-end) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer-effect var(--duration-shimmer) linear infinite;
+}
+
+/* Reveal on Scroll */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(var(--distance-large));
+  transition: opacity var(--duration-very-slow) var(--ease-out),
+              transform var(--duration-very-slow) var(--ease-out);
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   Animation State Classes
+   ============================================ */
+
+.is-animating {
+  pointer-events: none;
+}
+
+.animation-paused {
+  animation-play-state: paused !important;
+}
+
+/* ============================================
+   Reduced Motion Support
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .shimmer-effect {
+    animation: none;
+    background: var(--shimmer-color-mid);
+  }
+  
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+  }
+}
