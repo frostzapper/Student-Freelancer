@@ -1,5 +1,8 @@
 // API Configuration
-export const API_BASE_URL = 'https://payburst-backend.onrender.com/api';
+// For local development, use localhost
+// For production, use your Render URL
+// export const API_BASE_URL = 'http://localhost:5000/api'; // Local Development
+export const API_BASE_URL = 'https://payburst-backend.onrender.com/api'; // Production
 
 export const ENDPOINTS = {
     // Auth
