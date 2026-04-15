@@ -178,9 +178,11 @@
     padding: 1.5rem;
     border-radius: 16px;
     border: 1px solid var(--border-color);
-    transition: transform 0.2s, box-shadow 0.2s;
     position: relative;
     overflow: hidden;
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out),
+                border-color var(--duration-normal) var(--ease-out);
 }
 
 .job-card::before {
@@ -194,8 +196,10 @@
 }
 
 .job-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transform: translateY(calc(-1 * var(--distance-small)));
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15),
+                0 0 0 1px var(--accent-blue);
+    border-color: var(--accent-blue);
 }
 
 .job-card.color-yellow {
@@ -289,11 +293,19 @@
 }
 
 .badge-solo::before {
-    content: '👤';
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 .badge-group::before {
-    content: '👥';
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath d='M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z'/%3E%3C/svg%3E");
 }
 
 .badge-urgent {
@@ -302,19 +314,35 @@
 }
 
 .badge-urgent::before {
-    content: '⚡';
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath fill-rule='evenodd' d='M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 .badge-online::before {
-    content: '🌐';
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 .badge-offline::before {
-    content: '📍';
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 .badge-ai::before {
-    content: '🤖';
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath d='M13 7H7v6h6V7z'/%3E%3Cpath fill-rule='evenodd' d='M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2zM5 5h10v10H5V5z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 .job-footer {
@@ -414,4 +442,31 @@
 .price-value {
     font-weight: 600;
     color: var(--text-primary);
+}
+
+
+/* Card Expansion Animation */
+.card-expandable {
+    cursor: pointer;
+}
+
+.card-content-expanded {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height var(--duration-slow) var(--ease-out),
+                opacity var(--duration-slow) var(--ease-out);
+}
+
+.card-content-expanded.is-expanded {
+    max-height: 1000px;
+    opacity: 1;
+}
+
+.card-expand-icon {
+    transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.card-expandable.is-expanded .card-expand-icon {
+    transform: rotate(180deg);
 }
