@@ -1,35 +1,64 @@
-/* Global Styles - Dark Mode Theme */
+/* Global Styles - Lavender Theme */
 :root {
-    /* Dark Theme Card Backgrounds */
-    --pastel-peach: #2D1F1A;
-    --pastel-mint: #1A2D23;
-    --pastel-lavender: #231A2D;
-    --pastel-sky: #1A232D;
-    --pastel-cream: #2D2A1A;
+    /* Lavender Theme Card Backgrounds */
+    --pastel-peach: #FDE8D8;
+    --pastel-mint: #D8F5E8;
+    --pastel-lavender: #E8D8F5;
+    --pastel-sky: #D8EAF5;
+    --pastel-cream: #FDF5D8;
     
-    /* Main Colors - Dark Theme */
-    --bg-primary: #0F0F0F;
-    --bg-secondary: #1A1A1A;
-    --nav-bg: #000000;
-    --text-primary: #FFFFFF;
-    --text-secondary: #A0A0A0;
-    --text-light: #707070;
-    --border-color: #2A2A2A;
+    /* Main Colors - Lavender Theme */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F5F3FF;
+    --nav-bg: #1A1A1A;
+    --text-primary: #1A1A1A;
+    --text-secondary: #6B7280;
+    --text-light: #9CA3AF;
+    --border-color: #E5E7EB;
     
-    /* Accent Colors */
-    --accent-orange: #FF8C5A;
-    --accent-pink: #FF8CB8;
-    --accent-coral: #FF7A7A;
-    --accent-green: #34D399;
-    --accent-blue: #60A5FA;
+    /* Accent Colors - Lavender Theme */
+    --accent-orange: #FF6B35;
+    --accent-pink: #FF6B9D;
+    --accent-coral: #FF5757;
+    --accent-green: #10B981;
+    --accent-blue: #3B82F6;
+    --accent-lavender: #9B6FD4;
+    --accent-purple: #7C5CBF;
     
-    /* Badge Colors - Dark Theme */
-    --badge-urgent: #3F1F1F;
-    --badge-urgent-text: #FF6B6B;
-    --badge-auction: #3F2F1F;
-    --badge-auction-text: #FFB366;
-    --badge-ai: #1F2F3F;
-    --badge-ai-text: #66B3FF;
+    /* Badge Colors - Lavender Theme */
+    --badge-urgent: #FEE2E2;
+    --badge-urgent-text: #DC2626;
+    --badge-auction: #FED7AA;
+    --badge-auction-text: #EA580C;
+    --badge-ai: #DBEAFE;
+    --badge-ai-text: #2563EB;
+    
+    /* Animation Durations - SLOWER & SMOOTHER */
+    --duration-instant: 150ms;
+    --duration-fast: 400ms;
+    --duration-normal: 600ms;
+    --duration-slow: 800ms;
+    --duration-very-slow: 1000ms;
+    --duration-counter: 1500ms;
+    --duration-shimmer: 2000ms;
+    
+    /* Easing Functions - SMOOTHER */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in: cubic-bezier(0.32, 0, 0.67, 0);
+    --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Animation Distances */
+    --distance-small: 5px;
+    --distance-medium: 20px;
+    --distance-large: 30px;
+    
+    /* Ripple Effect Settings */
+    --ripple-duration: 800ms;
+    --ripple-opacity: 0.3;
+    --ripple-scale: 2.5;
+}
     
     /* Animation Durations */
     --duration-instant: 100ms;
@@ -68,16 +97,18 @@ body {
     background-color: var(--bg-secondary);
     color: var(--text-primary);
     line-height: 1.6;
+    transition: background-color var(--duration-slow) var(--ease-smooth);
 }
 
 a {
     color: var(--text-primary);
     text-decoration: none;
-    transition: opacity 0.2s;
+    transition: opacity var(--duration-normal) var(--ease-smooth),
+                color var(--duration-normal) var(--ease-smooth);
 }
 
 a:hover {
-    opacity: 0.8;
+    opacity: 0.7;
     text-decoration: none;
 }
 
@@ -99,9 +130,9 @@ h1, h2, h3 {
     gap: 0.5rem;
     position: relative;
     overflow: hidden;
-    transition: transform var(--duration-fast) var(--ease-out),
-                box-shadow var(--duration-fast) var(--ease-out),
-                background-color var(--duration-fast) var(--ease-out);
+    transition: transform var(--duration-normal) var(--ease-smooth),
+                box-shadow var(--duration-normal) var(--ease-smooth),
+                background-color var(--duration-normal) var(--ease-smooth);
 }
 
 .btn:hover {
@@ -109,34 +140,34 @@ h1, h2, h3 {
 }
 
 .btn:active {
-    transform: scale(0.95);
+    transform: scale(0.98);
     transition-duration: var(--duration-instant);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
-    color: #fff;
+    background: linear-gradient(135deg, var(--accent-lavender), var(--accent-purple));
+    color: #FFFFFF;
     border: none;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #FF9B6E, #FFB3D1);
-    box-shadow: 0 8px 24px rgba(255, 140, 90, 0.4);
+    background: linear-gradient(135deg, #A87FE4, #8C6CCF);
+    box-shadow: 0 8px 24px rgba(155, 111, 212, 0.4);
 }
 
 .btn-primary:active {
-    box-shadow: 0 4px 16px rgba(255, 140, 90, 0.3);
+    box-shadow: 0 4px 16px rgba(155, 111, 212, 0.3);
 }
 
 .btn-secondary {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
     border: 2px solid var(--border-color);
 }
 
 .btn-secondary:hover {
-    border-color: var(--accent-orange);
-    background-color: rgba(255, 140, 90, 0.1);
+    border-color: var(--accent-lavender);
+    background-color: var(--pastel-lavender);
 }
 
 .btn-small {
@@ -151,31 +182,33 @@ h1, h2, h3 {
     border: none;
     cursor: pointer;
     color: var(--text-primary);
-    transition: background-color 0.2s;
+    transition: background-color var(--duration-normal) var(--ease-smooth),
+                transform var(--duration-normal) var(--ease-smooth);
 }
 
 .btn-icon:hover {
-    background-color: var(--bg-secondary);
+    background-color: var(--pastel-lavender);
+    transform: scale(1.1);
 }
 
 
-/* Toast Notification - Dark Theme */
+/* Toast Notification - Lavender Theme */
 .toast {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
     padding: 1rem 1.5rem;
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     color: var(--text-primary);
     font-weight: 500;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     z-index: 2000;
     opacity: 0;
     transform: translateX(calc(100% + 2rem));
-    transition: transform var(--duration-normal) var(--ease-out),
-                opacity var(--duration-normal) var(--ease-out);
+    transition: transform var(--duration-slow) var(--ease-smooth),
+                opacity var(--duration-slow) var(--ease-smooth);
     pointer-events: none;
     max-width: 400px;
     overflow: hidden;
@@ -189,14 +222,14 @@ h1, h2, h3 {
 
 .toast.success {
     border-color: var(--accent-green);
-    background-color: rgba(52, 211, 153, 0.1);
-    color: var(--accent-green);
+    background-color: #ECFDF5;
+    color: #065F46;
 }
 
 .toast.error {
     border-color: var(--accent-coral);
-    background-color: rgba(255, 122, 122, 0.1);
-    color: var(--accent-coral);
+    background-color: #FEF2F2;
+    color: #991B1B;
 }
 
 /* Toast Progress Bar */
@@ -222,9 +255,9 @@ h1, h2, h3 {
 }
 
 
-/* Trust Fund Card - Dark Theme */
+/* Trust Fund Card - Lavender Theme */
 .trust-fund-card {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 1.25rem 1.5rem;
@@ -232,15 +265,15 @@ h1, h2, h3 {
     display: flex;
     align-items: center;
     gap: 1rem;
-    transition: transform var(--duration-normal) var(--ease-out),
-                box-shadow var(--duration-normal) var(--ease-out),
-                border-color var(--duration-normal) var(--ease-out);
+    transition: transform var(--duration-slow) var(--ease-smooth),
+                box-shadow var(--duration-slow) var(--ease-smooth),
+                border-color var(--duration-slow) var(--ease-smooth);
 }
 
 .trust-fund-card:hover {
-    border-color: var(--accent-orange);
-    box-shadow: 0 8px 24px rgba(255, 140, 90, 0.3),
-                0 0 0 1px rgba(255, 140, 90, 0.3);
+    border-color: var(--accent-lavender);
+    box-shadow: 0 8px 24px rgba(155, 111, 212, 0.2),
+                0 0 0 1px rgba(155, 111, 212, 0.3);
     transform: translateY(calc(-1 * var(--distance-small)));
 }
 
@@ -276,7 +309,7 @@ h1, h2, h3 {
 .trust-fund-amount {
     font-size: 1.5rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+    background: linear-gradient(135deg, var(--accent-lavender), var(--accent-purple));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -286,7 +319,7 @@ h1, h2, h3 {
 }
 
 .trust-fund-note small {
-    color: var(--accent-orange);
+    color: var(--accent-lavender);
     font-size: 0.85rem;
     font-weight: 500;
 }

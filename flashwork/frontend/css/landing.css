@@ -8,20 +8,22 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: #0F0F0F;
-    color: #FFFFFF;
+    background-color: #EDE9F6;
+    color: #1A1A1A;
     overflow-x: hidden;
+    transition: background-color var(--duration-slow) var(--ease-smooth);
 }
 
-/* Navbar - Dark Theme */
+/* Navbar - Lavender Theme */
 .landing-navbar {
-    background-color: #000000;
+    background-color: #1A1A1A;
     padding: 1rem 2rem;
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid #2A2A2A;
+    transition: all var(--duration-slow) var(--ease-smooth);
 }
 
 .nav-container {
@@ -41,12 +43,17 @@ body {
 .logo-circle {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #FF8C5A, #FF8CB8);
+    background: linear-gradient(135deg, #9B6FD4, #7C5CBF);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #FF8C5A;
+    border: 2px solid #9B6FD4;
+    transition: transform var(--duration-normal) var(--ease-smooth);
+}
+
+.logo-circle:hover {
+    transform: scale(1.1);
 }
 
 .brand-name {
@@ -60,7 +67,7 @@ body {
 }
 
 .brand-burst {
-    background: linear-gradient(135deg, #FF8C5A, #FF8CB8);
+    background: linear-gradient(135deg, #9B6FD4, #7C5CBF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 900;
@@ -76,11 +83,11 @@ body {
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
-    transition: color 0.2s;
+    transition: color var(--duration-normal) var(--ease-smooth);
 }
 
 .nav-center a:hover {
-    color: #FF8C5A;
+    color: #9B6FD4;
 }
 
 .nav-right {
@@ -96,13 +103,14 @@ body {
     font-weight: 600;
     padding: 0.5rem 1rem;
     border-radius: 8px;
-    transition: all 0.2s;
-    background-color: rgba(255, 140, 90, 0.2);
+    transition: all var(--duration-normal) var(--ease-smooth);
+    background-color: rgba(155, 111, 212, 0.2);
 }
 
 .nav-link:hover {
-    background: linear-gradient(135deg, #FF8C5A, #FF8CB8);
+    background: linear-gradient(135deg, #9B6FD4, #7C5CBF);
     color: white;
+    transform: scale(1.05);
 }
 
 .location {
@@ -136,19 +144,20 @@ body {
 }
 
 .logout-btn {
-    background: linear-gradient(135deg, #FF8C5A, #FF8CB8);
+    background: linear-gradient(135deg, #9B6FD4, #7C5CBF);
     color: white;
     border: none;
     padding: 0.5rem 1.25rem;
     border-radius: 9999px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--duration-normal) var(--ease-smooth);
 }
 
 .logout-btn:hover {
-    background: linear-gradient(135deg, #FF9B6E, #FFB3D1);
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, #A87FE4, #8C6CCF);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(155, 111, 212, 0.3);
 }
 
 /* Hero Section */
