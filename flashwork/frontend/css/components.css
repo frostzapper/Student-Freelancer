@@ -1,6 +1,6 @@
-/* Component Styles - Modern UI */
+/* Component Styles - Dark Theme */
 .navbar {
-    background-color: var(--dark-nav);
+    background-color: var(--nav-bg);
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
@@ -9,6 +9,7 @@
     position: sticky;
     top: 0;
     z-index: 100;
+    backdrop-filter: blur(10px);
 }
 
 .nav-brand {
@@ -35,15 +36,17 @@
     border-radius: 8px;
     font-size: 0.95rem;
     font-weight: 500;
+    color: var(--text-primary);
     transition: background-color 0.2s;
 }
 
 .nav-links a:hover {
-    background-color: var(--border-color);
+    background-color: var(--bg-secondary);
 }
 
 .nav-links a.active {
-    background-color: var(--border-color);
+    background-color: var(--bg-secondary);
+    color: var(--accent-orange);
 }
 
 .nav-actions {
@@ -53,13 +56,13 @@
 }
 
 .wallet-balance {
-    background-color: var(--dark-card);
-    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+    color: #fff;
     padding: 0.5rem 1rem;
     border-radius: 8px;
     font-weight: 600;
     font-size: 0.9rem;
-    border: 1px solid var(--border-color);
+    border: none;
     display: inline-block;
     min-width: 80px;
     text-align: center;
@@ -82,7 +85,7 @@
 }
 
 .notification-icon:hover {
-    background-color: var(--border-color);
+    background-color: var(--bg-secondary);
 }
 
 .notification-dot {
@@ -96,15 +99,16 @@
 }
 
 .job-card {
-    background-color: var(--dark-card);
+    background-color: var(--bg-secondary);
     padding: 1.5rem;
     border-radius: 12px;
     border: 1px solid var(--border-color);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .job-card:hover {
     transform: translateY(-5px);
+    border-color: var(--accent-orange);
 }
 
 .job-header {
@@ -144,11 +148,12 @@
 }
 
 .job-tag {
-    background-color: var(--pastel-purple);
-    color: #000;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 6px;
     font-size: 0.85rem;
+    border: 1px solid var(--border-color);
 }
 
 .job-footer {
@@ -160,21 +165,23 @@
 .job-price {
     font-size: 1.25rem;
     font-weight: bold;
-    color: var(--pastel-orange);
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .match-badge {
-    background-color: var(--pastel-green);
-    color: #000;
+    background-color: rgba(52, 211, 153, 0.2);
+    color: var(--accent-green);
     padding: 0.25rem 0.75rem;
     border-radius: 6px;
     font-weight: bold;
 }
 
 
-/* Job Card - Modern Colorful Design */
+/* Job Card - Modern Dark Design */
 .job-card {
-    background-color: var(--dark-card);
+    background-color: var(--bg-secondary);
     padding: 1.5rem;
     border-radius: 16px;
     border: 1px solid var(--border-color);
@@ -192,39 +199,49 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--pastel-pink), var(--pastel-blue), var(--pastel-green));
+    background: linear-gradient(90deg, var(--accent-pink), var(--accent-blue), var(--accent-green));
 }
 
 .job-card:hover {
     transform: translateY(calc(-1 * var(--distance-small)));
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15),
-                0 0 0 1px var(--accent-blue);
-    border-color: var(--accent-blue);
+    box-shadow: 0 12px 32px rgba(255, 140, 90, 0.3),
+                0 0 0 1px var(--accent-orange);
+    border-color: var(--accent-orange);
 }
 
-.job-card.color-yellow {
-    background: linear-gradient(135deg, #FFF4D4 0%, #FFE8B3 100%);
-    color: #000;
-}
-
-.job-card.color-green {
-    background: linear-gradient(135deg, #D4F4E0 0%, #B3E8CC 100%);
-    color: #000;
-}
-
-.job-card.color-purple {
-    background: linear-gradient(135deg, #E8D4FF 0%, #D4B3FF 100%);
-    color: #000;
-}
-
-.job-card.color-blue {
-    background: linear-gradient(135deg, #D4E8FF 0%, #B3D9FF 100%);
-    color: #000;
-}
-
+.job-card.color-yellow,
+.job-card.color-green,
+.job-card.color-purple,
+.job-card.color-blue,
 .job-card.color-pink {
-    background: linear-gradient(135deg, #FFE5F1 0%, #FFD4E5 100%);
-    color: #000;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.job-card.color-yellow:hover {
+    border-color: #FFD700;
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2);
+}
+
+.job-card.color-green:hover {
+    border-color: var(--accent-green);
+    box-shadow: 0 8px 24px rgba(52, 211, 153, 0.2);
+}
+
+.job-card.color-purple:hover {
+    border-color: #A78BFA;
+    box-shadow: 0 8px 24px rgba(167, 139, 250, 0.2);
+}
+
+.job-card.color-blue:hover {
+    border-color: var(--accent-blue);
+    box-shadow: 0 8px 24px rgba(96, 165, 250, 0.2);
+}
+
+.job-card.color-pink:hover {
+    border-color: var(--accent-pink);
+    box-shadow: 0 8px 24px rgba(255, 140, 184, 0.2);
 }
 
 .job-header {
@@ -242,23 +259,27 @@
 }
 
 .job-date {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--bg-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 6px;
     font-size: 0.75rem;
     font-weight: 600;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
 }
 
 .job-edit-icon {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--bg-primary);
     padding: 0.5rem;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s;
+    border: 1px solid var(--border-color);
 }
 
 .job-edit-icon:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--bg-secondary);
+    border-color: var(--accent-orange);
 }
 
 .job-client {
@@ -289,7 +310,9 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
 }
 
 .badge-solo::before {
@@ -309,8 +332,9 @@
 }
 
 .badge-urgent {
-    background-color: #FF6B9D;
-    color: #fff;
+    background-color: var(--badge-urgent);
+    color: var(--badge-urgent-text);
+    border-color: var(--badge-urgent-text);
 }
 
 .badge-urgent::before {
@@ -351,12 +375,15 @@
     align-items: center;
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid var(--border-color);
 }
 
 .job-price {
     font-size: 1.5rem;
     font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .job-actions {
@@ -371,17 +398,18 @@
 }
 
 .match-badge {
-    background-color: rgba(0, 217, 163, 0.2);
-    color: #00D9A3;
+    background-color: rgba(52, 211, 153, 0.2);
+    color: var(--accent-green);
     padding: 0.35rem 0.75rem;
     border-radius: 8px;
     font-weight: 700;
     font-size: 0.85rem;
+    border: 1px solid var(--accent-green);
 }
 
-/* Filters Sidebar */
+/* Filters Sidebar - Dark Theme */
 .filters-sidebar {
-    background-color: var(--dark-card);
+    background-color: var(--bg-secondary);
     padding: 1.5rem;
     border-radius: 16px;
     border: 1px solid var(--border-color);
